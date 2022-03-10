@@ -1,0 +1,45 @@
+name: Build Santa's Hood Server Containers
+
+on:
+  push:
+    branches:
+      - server
+  pull_request:
+    branches:
+      - server
+
+jobs:
+
+  BuildBackend:
+    runs-on: ubuntu-latest
+    container: docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create server container
+        run: docker build -t server-image server/
+      - name: Start server container
+        run: docker run -dp 5000:5000 --name server-container server-image
+      - name: Wait for backend to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping backend
+        run: docker exec server-container wget -q -O - http://localhost:5000/ping
+
+  BuildCompose:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      SERV_ENABLE_SSL: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start compose stack
+        run:  docker-compose up -d database server
+      - name: Wait for services to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping backend
+        run: docker exec server-container wget -q -O - http://localhost:5000/ping
+      - name: Ping database
+        run: docker exec database-container psql -U postgres -c \\l

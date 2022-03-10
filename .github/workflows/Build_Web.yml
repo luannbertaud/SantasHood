@@ -1,0 +1,42 @@
+name: Build Santa's Hood Web Container
+
+on:
+  push:
+    branches:
+      - web
+  pull_request:
+    branches:
+      - web
+
+jobs:
+
+  BuildWeb:
+    runs-on: ubuntu-latest
+    container: docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create web container
+        run: docker build -t web-image web/
+      - name: Start web container
+        run: docker run -dp 3000:3000 --name web-container web-image
+      - name: Wait for backend to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping web
+        run: docker exec web-container wget -q -O - http://localhost:3000/ping
+
+  BuildCompose:
+    runs-on: ubuntu-latest
+    env:
+      SERV_ENABLE_SSL: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start compose stack
+        run:  docker-compose up -d web
+      - name: Wait for services to be up
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
+      - name: Ping web
+        run: docker exec web-container wget -q -O - http://localhost:3000/ping
