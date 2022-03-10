@@ -4,7 +4,7 @@ from peewee import InterfaceError
 import psycopg2 as __driver
 from packaging import version as __version
 import models.db_globals as __DBglobals
-from models.db import DBdata, Users, Actions, Reactions
+from models.db import DBdata, UserCards
 
 def __ensureVersionSystem():
     if not DBdata.table_exists():
@@ -53,13 +53,8 @@ def validateDatabase():
 
     if needsUpdate(vers.version, "0.0.2"):
         print("Migrating to v0.0.2")
-        __DBglobals.db.create_tables([Users])
+        __DBglobals.db.create_tables([UserCards])
         vers.version = "0.0.2"
-
-    if needsUpdate(vers.version, "0.0.3"):
-        print("Migrating to v0.0.3")
-        __DBglobals.db.create_tables([Actions, Reactions])
-        vers.version = "0.0.3"
 
     # +=
     # if needsUpdate(vers.version, NEW_VERSION):
