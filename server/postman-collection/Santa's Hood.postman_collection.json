@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "e2474b97-4d46-4a1b-9221-67bcd8920198",
+		"name": "Santa's Hood",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New User Cards",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"888\",\n            \"age\": 21,\n            \"sexe\": \"M\",\n            \"interests\": [\"dodo\", \"bato\", \"cado\"]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/users/newcards",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"users",
+						"newcards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Gift Cards",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"888\",\n            \"budget\": 2100,\n            \"scope\": \"Family\",\n            \"shortlived\": false,\n            \"categories\": [\"dodo\", \"bato\", \"cado\"]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5000/gifts/newcards",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"gifts",
+						"newcards"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
