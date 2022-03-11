@@ -20,7 +20,7 @@ jobs:
       - name: Create worker container
         run: docker build -t worker-image worker/
       - name: Start worker container
-        run: [[ "$(docker run --rm -e WORKER_PING_ONLY=true --name worker-container worker-image)" == "$(echo -e "-> Executing directory is [/app]\npong")" ]]
+        run: docker run --rm -e WORKER_PING_ONLY=true --name worker-container worker-image
 
   BuildCompose:
     runs-on: ubuntu-latest
