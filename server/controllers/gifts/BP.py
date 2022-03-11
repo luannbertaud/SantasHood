@@ -13,8 +13,11 @@ def __validate_cards_data(data):
         try:
             assert(isinstance(d, dict))
             assert(isinstance(d["uuid"], str))
+            assert(isinstance(d["name"], str))
+            assert(isinstance(d["description"], str))
             assert(isinstance(d["budget"], int))
             assert(isinstance(d["scope"], str))
+            assert(isinstance(d["cluttering"], int))
             assert(isinstance(d["shortlived"], bool))
             assert(isinstance(d["categories"], list))
         except:

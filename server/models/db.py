@@ -2,7 +2,7 @@
 
 from peewee import Model as __Model
 from peewee import TextField, IntegerField, BooleanField
-from playhouse.postgres_ext import JSONField
+from playhouse.postgres_ext import JSONField, ArrayField
 from models.db_globals import db
 
 class __BaseModel(__Model):
@@ -16,11 +16,15 @@ class UserCards(__BaseModel):
     uuid = TextField(primary_key=True)
     age = IntegerField()
     sexe = TextField()
-    interests = JSONField()
+    interests = ArrayField(TextField)
+    likedgifts = ArrayField(TextField)
 
 class GiftCards(__BaseModel):
     uuid = TextField(primary_key=True)
+    name = TextField()
+    description = TextField()
     budget = IntegerField()
     scope = TextField()
+    cluttering = IntegerField()
     shortlived = BooleanField()
-    categories = JSONField()
+    categories = ArrayField(TextField)

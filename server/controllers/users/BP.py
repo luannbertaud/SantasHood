@@ -16,6 +16,7 @@ def __validate_cards_data(data):
             assert(isinstance(d["age"], int))
             assert(isinstance(d["sexe"], str))
             assert(isinstance(d["interests"], list))
+            assert(isinstance(d["likedgifts"], list))
         except:
             return False
     return True
