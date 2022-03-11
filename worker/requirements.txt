@@ -2,3 +2,6 @@ peewee==3.14.8
 python-dotenv==0.19.2
 psycopg2-binary==2.9.2
 packaging==20.9
+scikit-learn==1.0.1
+numpy==1.19.5
+matplotlib==3.5.1

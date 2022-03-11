@@ -1,58 +1,30 @@
 #!/usr/bin/env python3
 
+import sys
 import random
 import numpy as np
-from sklearn.datasets import make_blobs
 from tools.db import validateDatabase
 from tools.graphical import show_clusters
 from computation.clusters import compute_clusters
 
 
-# validateDatabase()
-# print("OK")
+def test_clustering():
+    features = np.array([[random.randint(0, 100), random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)]])
 
-features, true_labels = make_blobs(
-    n_samples=200,
-    centers=3,
-    cluster_std=2.75,
-    random_state=42
-)
+    for i in range(0, 20):
+        tmp = []
+        for ii in range(0, 4):
+            tmp.append(random.randint(0, 100))
+        features = np.append(features, [tmp], axis=0)
 
-features = \
-np.array([
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
-    [random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)],
+    labels, _ = compute_clusters(features)
+    show_clusters(labels, features)
 
-])
 
-labels, _ = compute_clusters(features)
-show_clusters(labels, features)
+if __name__ == "__main__":
+    if ((len(sys.argv) > 1) and (sys.argv[1] == "--ping")):
+        print("pong")
+        exit(0)
+    
+    validateDatabase()
+    test_clustering()
