@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"888\",\n            \"age\": 21,\n            \"sexe\": \"M\",\n            \"interests\": [\"dodo\", \"bato\", \"cado\"]\n        }\n    ]\n}",
+					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"8888\",\n            \"age\": 21,\n            \"sexe\": \"M\",\n            \"interests\": [\"dodo\", \"bato\", \"cado\"],\n            \"likedgifts\": [\"999\"]\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -41,7 +41,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"888\",\n            \"budget\": 2100,\n            \"scope\": \"Family\",\n            \"shortlived\": false,\n            \"categories\": [\"dodo\", \"bato\", \"cado\"]\n        }\n    ]\n}",
+					"raw": "{\n    \"cards\": [\n        {\n            \"uuid\": \"999\",\n            \"name\": \"FirstaOne\",\n            \"description\": \"descOne\",\n            \"budget\": 2100,\n            \"scope\": \"Family\",\n            \"cluttering\": 9,\n            \"shortlived\": false,\n            \"categories\": [\"dodo\", \"bato\", \"cado\"]\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
