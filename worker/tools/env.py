@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
+POSTGRES_PASSWORD = environ.get('POSTGRES_PASSWORD')
+POSTGRES_USER = environ.get('POSTGRES_USER')
+POSTGRES_PORT = environ.get('POSTGRES_PORT')
+POSTGRES_HOST = environ.get('POSTGRES_HOST')
+POSTGRES_DB_NAME = environ.get('POSTGRES_DB_NAME')
