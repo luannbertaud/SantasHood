@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-import random
-import numpy as np
-from copy import deepcopy
 from computation.clusters import compute_clusters_tmp, create_relations
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler
 from tools.db import validateDatabase
-from tools.graphical import show_clusters
 
 
 

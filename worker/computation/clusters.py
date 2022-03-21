@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
-import matplotlib.pyplot as plt
-import numpy as np
 import random
+from uuid import uuid4 as guuid
+import numpy as np
+import matplotlib.pyplot as plt
+from peewee import DoesNotExist
+from hdbscan import HDBSCAN
 from sklearn.cluster import DBSCAN, AgglomerativeClustering, KMeans
 from sklearn.metrics import silhouette_score
-from hdbscan import HDBSCAN
-from peewee import DoesNotExist
-from uuid import uuid4 as guuid
-
 from tools.db import needs_db
 from models.db import ClustersRelations, GiftCards, UserCards
 
@@ -86,7 +85,7 @@ def create_relations():
     except DoesNotExist as e:
         return False
     for u in users:
-        if ((u.clusterdata == {}) or ("cluster" not in u.clusterdata.keys())):
+        if ((u.clusterdata == {}) or ("cluster" not in u.clusterdata.keys()) or ("runID" not in u.clusterdata.keys())):
             continue
         cl = u.clusterdata["cluster"]
         if (cl not in relations.keys()):
@@ -98,8 +97,11 @@ def create_relations():
                 gift = GiftCards.get(GiftCards.uuid == gu)
             except DoesNotExist as e:
                 continue
-            if (gift and gift.clusterdata != {} and ("cluster" in gift.clusterdata)):
-                relations[cl].append(gift.clusterdata["cluster"])
+            if not (gift and gift.clusterdata != {} and ("cluster" in gift.clusterdata) and ("runID" in gift.clusterdata)):
+                continue
+            if (gift.clusterdata["runID"] != u.clusterdata["runID"]):
+                continue
+            relations[cl].append(gift.clusterdata["cluster"])
     for cl in list(relations.keys()):
         while True:
             newUUID = str(guuid())
