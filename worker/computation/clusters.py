@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
+import matplotlib.pyplot as plt
+import numpy as np
+import random
 from sklearn.cluster import DBSCAN, AgglomerativeClustering, KMeans
 from sklearn.metrics import silhouette_score
 from hdbscan import HDBSCAN
-import matplotlib.pyplot as plt
-import numpy as np
+from peewee import DoesNotExist
+from uuid import uuid4 as guuid
 
+from tools.db import needs_db
+from models.db import ClustersRelations, GiftCards, UserCards
 
 def compute_clusters(gifts, n_clusters=None):
     
@@ -40,3 +45,68 @@ def compute_clusters(gifts, n_clusters=None):
     agc= HDBSCAN(min_cluster_size=n_clusters)
     agc.fit(gifts)
     return agc.labels_, agc
+
+
+@needs_db
+def compute_clusters_tmp(runID):
+    query = None
+    try:
+        query = GiftCards.select()
+    except DoesNotExist as e:
+        pass
+    if query:
+        for q in query:
+            q.clusterdata = {
+                "runID": runID,
+                "cluster": random.randint(0, 2)
+            }
+            q.save()
+
+    query = None
+    try:
+        query = UserCards.select()
+    except DoesNotExist as e:
+        pass
+    if query:
+        for q in query:
+            q.clusterdata = {
+                "runID": runID,
+                "cluster": random.randint(0, 2)
+            }
+            q.save()
+
+    return True
+
+@needs_db
+def create_relations():
+    relations = {}
+    
+    try:
+        users = UserCards.select()
+    except DoesNotExist as e:
+        return False
+    for u in users:
+        if ((u.clusterdata == {}) or ("cluster" not in u.clusterdata.keys())):
+            continue
+        cl = u.clusterdata["cluster"]
+        if (cl not in relations.keys()):
+            relations[cl] = []
+
+        for gu in u.likedgifts:
+            gift = None
+            try:
+                gift = GiftCards.get(GiftCards.uuid == gu)
+            except DoesNotExist as e:
+                continue
+            if (gift and gift.clusterdata != {} and ("cluster" in gift.clusterdata)):
+                relations[cl].append(gift.clusterdata["cluster"])
+    for cl in list(relations.keys()):
+        while True:
+            newUUID = str(guuid())
+            try:
+                ClustersRelations.get(ClustersRelations.uuid == str(newUUID))
+                continue
+            except DoesNotExist as e:
+                ClustersRelations.create(uuid=newUUID, usercluster=cl, giftclusters=relations[cl])
+                break
+    return True

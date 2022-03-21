@@ -4,7 +4,7 @@ import sys
 import random
 import numpy as np
 from copy import deepcopy
-from computation.clusters import compute_clusters
+from computation.clusters import compute_clusters_tmp, create_relations
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler
 from tools.db import validateDatabase
 from tools.graphical import show_clusters
@@ -17,3 +17,7 @@ if __name__ == "__main__":
         exit(0)
     
     validateDatabase()
+    print("Valid database, starting worker ..")
+
+    compute_clusters_tmp("theid")
+    create_relations()

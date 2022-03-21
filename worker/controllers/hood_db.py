@@ -55,5 +55,4 @@ def validateDatabase():
     vers = DBdata.get()
     if (__version.parse(vers.version) != __version.parse(__DBglobals.WORKER_VERSION)):
         raise Exception("Worker and Database version mismatch. Please update this worker.")
-    print("Valid database, starting worker ..")
     return True
