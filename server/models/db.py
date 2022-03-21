@@ -30,3 +30,8 @@ class GiftCards(__BaseModel):
     cluttering = IntegerField()
     shortlived = BooleanField()
     categories = ArrayField(TextField)
+
+class ClustersRelations(__BaseModel):
+    uuid = TextField(primary_key=True)
+    usercluster = TextField()
+    giftclusters = ArrayField(TextField)
