@@ -19,7 +19,7 @@ def save_giftcard(card):
     try:
         c = GiftCards.get(GiftCards.uuid == card["uuid"])
     except DoesNotExist as e:
-        GiftCards.create(uuid=card["uuid"], name=card["name"], description=card["description"], budget=card['budget'], scope=card['scope'], cluttering=card["cluttering"], shortlived=card['shortlived'], categories=card['categories'])
+        GiftCards.create(uuid=card["uuid"], name=card["name"], description=card["description"], clusterdata={}, budget=card['budget'], scope=card['scope'], cluttering=card["cluttering"], shortlived=card['shortlived'], categories=card['categories'])
         return card["uuid"]
     c.name = card["name"]
     c.description = card["description"]

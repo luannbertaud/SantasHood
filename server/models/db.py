@@ -16,6 +16,7 @@ class UserCards(__BaseModel):
     uuid = TextField(primary_key=True)
     age = IntegerField()
     sexe = TextField()
+    clusterdata = JSONField()
     interests = ArrayField(TextField)
     likedgifts = ArrayField(TextField)
 
@@ -23,6 +24,7 @@ class GiftCards(__BaseModel):
     uuid = TextField(primary_key=True)
     name = TextField()
     description = TextField()
+    clusterdata = JSONField()
     budget = IntegerField()
     scope = TextField()
     cluttering = IntegerField()

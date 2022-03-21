@@ -10,7 +10,7 @@ def save_usercard(card):
     try:
         c = UserCards.get(UserCards.uuid == card["uuid"])
     except DoesNotExist as e:
-        UserCards.create(uuid=card["uuid"], age=card['age'], sexe=card['sexe'], interests=card['interests'], likedgifts=card["likedgifts"])
+        UserCards.create(uuid=card["uuid"], age=card['age'], sexe=card['sexe'], clusterdata={}, interests=card['interests'], likedgifts=card["likedgifts"])
         return card["uuid"]
     c.age = card["age"]
     c.sexe = card["sexe"]
