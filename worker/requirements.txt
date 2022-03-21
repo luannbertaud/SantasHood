@@ -5,3 +5,4 @@ packaging==20.9
 scikit-learn==1.0.1
 numpy==1.19.5
 matplotlib==3.5.1
+hdbscan==0.8.28

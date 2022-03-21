@@ -3,7 +3,7 @@
 from peewee import PostgresqlDatabase
 from tools.env import *
 
-WORKER_VERSION = "0.0.3"
+WORKER_VERSION = "0.0.4"
 
 DATABASE_PARAMS = {
     "name": POSTGRES_DB_NAME,
