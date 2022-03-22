@@ -7,7 +7,7 @@ from tools.db import needs_db
 from controllers.gifts.save_cards import save_giftcard
 
 from models.db import UserCards
-from peewee import Case, Expression
+from peewee import Case, Expression, SQL
 from playhouse.postgres_ext import fn, ArrayField
 
 giftsBP = Blueprint('giftsBP', __name__)
@@ -53,11 +53,11 @@ def users_newcards():
 
 
 def __get_cost(bage, bsexe, binterests):
-
     age = fn.ABS(UserCards.age - bage)
     sexe = (0 if UserCards.sexe == bsexe else 1)
-    interests = Expression(len(binterests), '-', fn.cardinality(UserCards.interests.cast("text[]")))
-    res = age + sexe + interests
+    interests_less = Expression(SQL(f"cardinality(array(select unnest(ARRAY{binterests})"), "EXCEPT", Expression(fn.select(fn.UNNEST(UserCards.interests.cast("text[]"))), "", SQL('))')))
+    interests_more = Expression(SQL("cardinality(array("), "", Expression(fn.select(fn.UNNEST(UserCards.interests.cast("text[]"))), "EXCEPT", SQL(f"select unnest(ARRAY{binterests})))")))
+    res = age + sexe + interests_less + interests_more
     return res
 
 @giftsBP.route("/searchfor", methods=["GET"])
@@ -72,10 +72,8 @@ def users_searchfor():
         return {"code": 400, "message": "Invalid usercard argument."}, 400
 
 
-    cost = Case(None, (
-        (True, __get_cost(usercard["age"], usercard["sexe"], usercard["interests"])),
-    ), -1)
-    query = UserCards.select(UserCards.age, cost.alias('cost'))
+    cost = __get_cost(usercard["age"], usercard["sexe"], usercard["interests"])
+    query = UserCards.select(UserCards.age, cost.alias('cost')).order_by(cost)
     for q in query.dicts():
         print(q)
     return usercard
