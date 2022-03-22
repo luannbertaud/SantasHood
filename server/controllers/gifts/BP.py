@@ -3,12 +3,13 @@
 import base64
 import json
 from flask import Blueprint, request
+from peewee import Expression, SQL, DoesNotExist
+from playhouse.postgres_ext import fn
+from playhouse.shortcuts import model_to_dict
 from tools.db import needs_db
+from models.db import GiftCards, UserCards, ClustersRelations
 from controllers.gifts.save_cards import save_giftcard
 
-from models.db import UserCards
-from peewee import Case, Expression, SQL
-from playhouse.postgres_ext import fn, ArrayField
 
 giftsBP = Blueprint('giftsBP', __name__)
 
@@ -62,8 +63,22 @@ def __get_cost(bage, bsexe, binterests):
 
 @giftsBP.route("/searchfor", methods=["GET"])
 @needs_db
-def users_searchfor():
+def users_searchfor(): # TODO error handling try / excepts
     usercard = None
+    page = request.args.get("page", 0, type=int)
+    gpp = request.args.get("gpp", 10, type=int)
+    uts = request.args.get("uts", 1, type=int)
+    interesting_gift_clusters = []
+    gift_clusters_scores = {}
+    res_gifts = None
+    res = []
+
+    if (page < 0):
+        page = 0
+    if (gpp < 1):
+        gpp = 10
+    if (uts < 1):
+        uts = 1
     try:
         usercard = json.loads(base64.urlsafe_b64decode(request.args["usercard"]))
     except:
@@ -71,9 +86,34 @@ def users_searchfor():
     if not usercard:
         return {"code": 400, "message": "Invalid usercard argument."}, 400
 
-
     cost = __get_cost(usercard["age"], usercard["sexe"], usercard["interests"])
-    query = UserCards.select(UserCards.age, cost.alias('cost')).order_by(cost)
-    for q in query.dicts():
-        print(q)
-    return usercard
+    users = UserCards.select(UserCards.clusterdata, cost.alias('cost')).order_by(cost).paginate(0, uts)
+
+    users_clusters = [u.clusterdata["cluster"] for u in users]
+    print(users_clusters)
+
+    for i in range(len(users_clusters)):
+        rls = ClustersRelations.select().where(ClustersRelations.usercluster.cast("INT") == users_clusters[i])
+        for rl in rls:
+            interesting_gift_clusters += list(rl.giftclusters) * (len(users_clusters)-i)
+
+    for c in interesting_gift_clusters:
+        gift_clusters_scores[c] = interesting_gift_clusters.count(c) / len(interesting_gift_clusters)
+    s_gift_clusters_scores = {k: v for k, v in sorted(gift_clusters_scores.items(), key=lambda item: item[1], reverse=True)}
+    print(s_gift_clusters_scores)
+
+    for k in list(s_gift_clusters_scores.keys()):
+        gifts = None
+        try:
+            gifts = GiftCards.select().where(GiftCards.clusterdata["cluster"].cast("INT") == k)
+        except DoesNotExist:
+            continue
+        if (not res_gifts):
+            res_gifts = gifts
+        else:
+            res_gifts += gifts
+        if (len(res_gifts) >= (page*gpp)+gpp):
+            break
+    res_gifts = res_gifts[page*gpp:(page**gpp)+gpp]
+    res = [model_to_dict(g) for g in res_gifts]
+    return {"code": 200, "data": res}
