@@ -93,7 +93,7 @@ def users_searchfor(): # TODO error handling try / excepts
     print(users_clusters)
 
     for i in range(len(users_clusters)):
-        rls = ClustersRelations.select().where(ClustersRelations.usercluster.cast("INT") == users_clusters[i])
+        rls = ClustersRelations.select().where(ClustersRelations.usercluster.cast("INT") == users_clusters[i]) # TODO order by date and check runID
         for rl in rls:
             interesting_gift_clusters += list(rl.giftclusters) * (len(users_clusters)-i)
 

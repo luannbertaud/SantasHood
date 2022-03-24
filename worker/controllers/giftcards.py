@@ -3,8 +3,9 @@
 from peewee import DoesNotExist
 from sklearn.preprocessing import StandardScaler
 from tools.db import needs_db
+from tools.log import *
 from models.db import GiftCards
-from computation.clusters import compute_clusters, agregate_clusters
+from computation.clusters import compute_clusters, aggregate_clusters
 
 
 def encode_giftcards(cards):
@@ -31,7 +32,7 @@ def encode_giftcards(cards):
             encoded.append(buff)
             based_uuids.append(card["uuid"])
             buff = buff[:-1]
-    
+    logger.info(f"\tData to be feed in cluster computation: {len(encoded)} encoded gifts.")
     scaler = StandardScaler()
     encoded = scaler.fit_transform(encoded)
     return encoded, based_uuids
@@ -73,11 +74,21 @@ def save_giftcards(uuid_clusters, runID):
     return True
 
 
-def refresh_gifts_clusters(runID): # TODO Logging
+def refresh_gifts_clusters(runID):
+    logger.info("---- Updating gifts clusters ----")
+    logger_waiting.info("Loading gifts..")
     data = load_giftcards()
+    logger_finished.info("..OK")
 
+    logger.info("Preprocessing gifts..")
     encoded, e_uuids = encode_giftcards(data["cards"])
+    logger.info("OK")
+    logger.info("Computing clusters..")
     labels, _ = compute_clusters(encoded)
-    uuid_clusters = agregate_clusters(labels, e_uuids)
+    uuid_clusters = aggregate_clusters(labels, e_uuids)
+    logger.info("OK")
 
+    logger_waiting.info("Saving clusters..")
     save_giftcards(uuid_clusters, runID)
+    logger_finished.info("..OK")
+    logger.info("---- Gifts clusters updated ----")

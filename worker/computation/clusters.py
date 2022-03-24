@@ -8,6 +8,7 @@ from peewee import DoesNotExist
 from hdbscan import HDBSCAN
 from sklearn.metrics import silhouette_score
 from tools.db import needs_db
+from tools.log import *
 from models.db import ClustersRelations, GiftCards, UserCards
 
 def compute_clusters(data, min_cluster_size=None):
@@ -31,7 +32,7 @@ def compute_clusters(data, min_cluster_size=None):
                 record = (score, cn, len(np.unique(agc.labels_)))
 
         min_cluster_size = record[1]
-        print(f"For {len(data)} data, the optimal clusters number seems to be {record[2]} (min {record[1]}) -> {record[0]}.")
+        logger.info(f"\tFor {len(data)} data, the optimal clusters number seems to be {record[2]} (min {record[1]}) -> {record[0]}.")
 
         # plt.style.use("fivethirtyeight")
         # plt.plot(cluster_nb_list, scores)
@@ -44,12 +45,13 @@ def compute_clusters(data, min_cluster_size=None):
     agc.fit(data)
     return agc.labels_, agc
 
-def agregate_clusters(labels, e_uuids, extract_best=False):
+def aggregate_clusters(labels, e_uuids, extract_best=False):
     res = {}
     
     if (len(e_uuids) != len(labels)):
         raise Exception("Labels and Uuids number mismatch.")
-    
+    logger.info(f"\tAggregating {len(labels)} ({len(set(labels))}) clusters to {len(set(e_uuids))} uniques uuids.")
+
     for i in range(len(labels)):
         if (e_uuids[i] not in res.keys()):
             res[e_uuids[i]] = []
@@ -93,6 +95,7 @@ def create_relations(runID):
                 continue
             relations[cl].append(gift.clusterdata["cluster"])
     
+    logger.info(f"\t{len(list(relations.keys()))} unique relations to be saved.")
     for cl in list(relations.keys()):
         while True:
             newUUID = str(guuid())

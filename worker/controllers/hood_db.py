@@ -5,6 +5,7 @@ import psycopg2 as __driver
 from packaging import version as __version
 import models.db_globals as __DBglobals
 from models.db import DBdata
+from tools.log import *
 
 
 def __ensureVersionSystem():
@@ -27,7 +28,7 @@ def validateDatabase():
     try:
         co = __driver.connect(host=__DBglobals.DATABASE_PARAMS["host"], port=__DBglobals.DATABASE_PARAMS["port"], user=__DBglobals.DATABASE_PARAMS["user"], password=__DBglobals.DATABASE_PARAMS["password"])
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
         return False
     co.autocommit = True
     curs = co.cursor()
@@ -37,7 +38,7 @@ def validateDatabase():
         if __DBglobals.DATABASE_PARAMS["name"].lower() not in databases:
             raise Exception(f"Can't find database {__DBglobals.DATABASE_PARAMS['name'].lower()}.")
     except Exception as e:
-        print(f"ERROR connecting to database: {e}")
+        logger.error(f"Connecting to database: {e}")
         exit(84)
     co.close()
 
@@ -51,7 +52,7 @@ def validateDatabase():
     except Exception or InterfaceError as e:
         __DBglobals.init()
         if (not __ensureVersionSystem()):
-            print(f"ERROR connecting to database: {e}")
+            logger.error(f"Connecting to database: {e}")
             exit(84)
 
     vers = DBdata.get()

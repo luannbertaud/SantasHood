@@ -3,8 +3,9 @@
 from peewee import DoesNotExist
 from sklearn.preprocessing import StandardScaler
 from tools.db import needs_db
+from tools.log import *
 from models.db import UserCards
-from computation.clusters import compute_clusters, agregate_clusters
+from computation.clusters import compute_clusters, aggregate_clusters
 
 
 def encode_usercards(cards):
@@ -29,7 +30,7 @@ def encode_usercards(cards):
             encoded.append(buff)
             based_uuids.append(card["uuid"])
             buff = buff[:-1]
-    
+    logger.info(f"\tData to be feed in cluster computation: {len(encoded)} encoded users.")
     scaler = StandardScaler()
     encoded = scaler.fit_transform(encoded)
     return encoded, based_uuids
@@ -71,11 +72,22 @@ def save_usercards(uuid_clusters, runID):
     return True
 
 
-def refresh_users_clusters(runID): # TODO Logging
+def refresh_users_clusters(runID):
+    logger.info("---- Updating users clusters ----")
+    logger_waiting.info("Loading users..")
     data = load_usercards()
+    logger_finished.info("..OK")
 
+
+    logger.info("Preprocessing users..")
     encoded, e_uuids = encode_usercards(data["cards"])
+    logger.info("OK")
+    logger.info("Computing clusters..")
     labels, _ = compute_clusters(encoded)
-    uuid_clusters = agregate_clusters(labels, e_uuids, False)
+    uuid_clusters = aggregate_clusters(labels, e_uuids)
+    logger.info("OK")
 
+    logger_waiting.info("Saving clusters..")
     save_usercards(uuid_clusters, runID)
+    logger_finished.info("..OK")
+    logger.info("---- Users clusters updated ----")

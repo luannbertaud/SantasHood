@@ -1,10 +1,29 @@
 #!/usr/bin/env python3
 
 import sys
+from uuid import uuid4 as guuid
 from computation.clusters import create_relations
 from controllers.giftcards import refresh_gifts_clusters
 from controllers.usercards import refresh_users_clusters
 from tools.db import validateDatabase
+from tools.log import *
+
+def run():
+    logger.warning("=> Worker run triggered.")
+    validateDatabase()
+    logger.info("Valid database, starting worker ..")
+
+    logger.info("<<<< Updating all clusters >>>>")
+    
+    runID = str(guuid())
+    logger.info(f"RunID is {runID}.")
+    refresh_gifts_clusters(runID)
+    refresh_users_clusters(runID)
+    logger.info("Saving relations between clusters..")
+    create_relations(runID)
+    logger.info("OK")
+
+    logger.info("<<<< All clusters updated >>>>")
 
 
 if __name__ == "__main__":
@@ -13,9 +32,4 @@ if __name__ == "__main__":
         exit(0)
     
     validateDatabase()
-    print("Valid database, starting worker ..")
-
-    runID = "theid"
-    refresh_gifts_clusters(runID)
-    refresh_users_clusters(runID)
-    create_relations(runID)
+    run()

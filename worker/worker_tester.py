@@ -2,7 +2,7 @@
 
 import sys
 import numpy as np
-from computation.clusters import compute_clusters, agregate_clusters
+from computation.clusters import compute_clusters, aggregate_clusters
 from tools.graphical import show_clusters
 from controllers.giftcards import refresh_gifts_clusters
 from controllers.usercards import refresh_users_clusters
@@ -23,7 +23,7 @@ from pprint import pprint
 
 # encoded, e_uuids = encode_giftcards(data["cards"])
 # labels, _ = compute_clusters(encoded)
-# uuid_clusters = agregate_clusters(labels, e_uuids)
+# uuid_clusters = aggregate_clusters(labels, e_uuids)
 # pprint(uuid_clusters)
 
 # show_clusters(labels, np.array(encoded))
