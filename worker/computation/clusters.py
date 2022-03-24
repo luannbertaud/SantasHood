@@ -11,27 +11,27 @@ from sklearn.metrics import silhouette_score
 from tools.db import needs_db
 from models.db import ClustersRelations, GiftCards, UserCards
 
-def compute_clusters(gifts, n_clusters=None):
+def compute_clusters(data, min_cluster_size=None):
     
-    if (not n_clusters):
+    if (not min_cluster_size):
         scores = []
         record = (-1, 2, -1)
-        cluster_nb_list = range(2, len(gifts)+1)
+        cluster_nb_list = range(2, len(data)+1, 3)
         for cn in cluster_nb_list:
             # agc = KMeans(n_clusters=cn, algorithm="k-mean++")
             agc = HDBSCAN(min_cluster_size=cn)
-            agc.fit(gifts)
-            if (len(np.unique(agc.labels_)) <= 1) or (len(np.unique(agc.labels_)) >= len(gifts)):
+            agc.fit(data)
+            if (len(np.unique(agc.labels_)) <= 1) or (len(np.unique(agc.labels_)) >= len(data)):
                 scores.append(0)
                 continue
-            score = (silhouette_score(gifts, agc.labels_))
+            score = silhouette_score(data, agc.labels_)
             scores.append(score)
-            if (score >= record[0]):
+            if (score > record[0]):
                 record = (score, cn, len(np.unique(agc.labels_)))
 
-        n_clusters = record[1] #TODO record is maybe not the best one
-        print(f"For {len(gifts)} gifts, the optimal clusters number seems to be {record[2]} (min {record[1]}) -> {record[0]}.")
-        print(scores)
+        min_cluster_size = record[1] #TODO record is maybe not the best one
+        print(f"For {len(data)} data, the optimal clusters number seems to be {record[2]} (min {record[1]}) -> {record[0]}.")
+        # print(scores)
 
         # plt.style.use("fivethirtyeight")
         # plt.plot(cluster_nb_list, scores)
@@ -41,10 +41,25 @@ def compute_clusters(gifts, n_clusters=None):
         # plt.show()
 
     # agc = AgglomerativeClustering(n_clusters=n_clusters)
-    agc= HDBSCAN(min_cluster_size=n_clusters)
-    agc.fit(gifts)
+    agc = HDBSCAN(min_cluster_size=min_cluster_size)
+    agc.fit(data)
     return agc.labels_, agc
 
+def agregate_clusters(labels, e_uuids, extract_best=True):
+    res = {}
+    
+    if (len(e_uuids) != len(labels)):
+        raise Exception("Labels and Uuids number mismatch.")
+    for i in range(len(labels)):
+        if (e_uuids[i] not in res.keys()):
+            res[e_uuids[i]] = []
+        res[e_uuids[i]].append(labels[i])
+        res[e_uuids[i]] = list(set(res[e_uuids[i]]))
+    if (not extract_best):
+        return res
+    for k in list(res.keys()):
+        res[k] = max(set(res[k]), key = res[k].count)
+    return res
 
 @needs_db
 def compute_clusters_tmp(runID):

@@ -6,7 +6,7 @@ echo "-> Executing directory is [$EXEC_PATH]"
 
 if [[ "$WORKER_PING_ONLY" == true ]] ; 
 then
-    python3 worker.py --ping
+    python3 worker_tester.py --ping
 else
-    python3 worker.py
+    python3 worker_tester.py
 fi
