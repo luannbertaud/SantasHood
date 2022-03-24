@@ -6,6 +6,7 @@ from tools.db import needs_db
 from models.db import GiftCards
 from computation.clusters import compute_clusters, agregate_clusters
 
+
 def encode_giftcards(cards):
     all_scopes = []
     all_categories = []
@@ -48,6 +49,7 @@ def load_giftcards():
         return {"cards": []}
     return {"cards": [d for d in query.dicts()]}
 
+
 @needs_db
 def save_giftcards(uuid_clusters, runID):
     query = None
@@ -69,6 +71,7 @@ def save_giftcards(uuid_clusters, runID):
         }
         q.save()
     return True
+
 
 def refresh_gifts_clusters(runID): # TODO Logging
     data = load_giftcards()

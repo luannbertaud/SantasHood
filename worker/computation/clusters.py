@@ -65,7 +65,7 @@ def agregate_clusters(labels, e_uuids, extract_best=False):
     return res
 
 @needs_db
-def create_relations():
+def create_relations(): #TODO verify runID
     relations = {}
     
     try:

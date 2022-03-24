@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
-from computation.clusters import compute_clusters_tmp, create_relations
+from computation.clusters import create_relations
+from controllers.giftcards import refresh_gifts_clusters
+from controllers.usercards import refresh_users_clusters
 from tools.db import validateDatabase
-
 
 
 if __name__ == "__main__":
@@ -14,5 +15,7 @@ if __name__ == "__main__":
     validateDatabase()
     print("Valid database, starting worker ..")
 
-    compute_clusters_tmp("theid")
+    runID = "theid"
+    refresh_gifts_clusters(runID)
+    refresh_users_clusters(runID)
     create_relations()

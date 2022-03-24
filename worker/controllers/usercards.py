@@ -7,8 +7,6 @@ from models.db import UserCards
 from computation.clusters import compute_clusters, agregate_clusters
 
 
-from pprint import pprint
-
 def encode_usercards(cards):
     all_sexes = []
     all_interests = []
@@ -49,6 +47,7 @@ def load_usercards():
         return {"cards": []}
     return {"cards": [d for d in query.dicts()]}
 
+
 @needs_db
 def save_usercards(uuid_clusters, runID):
     query = None
@@ -70,6 +69,7 @@ def save_usercards(uuid_clusters, runID):
         }
         q.save()
     return True
+
 
 def refresh_users_clusters(runID): # TODO Logging
     data = load_usercards()

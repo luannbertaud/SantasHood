@@ -6,6 +6,7 @@ from packaging import version as __version
 import models.db_globals as __DBglobals
 from models.db import DBdata
 
+
 def __ensureVersionSystem():
     try:
         if ("dbdata" not in __DBglobals.db.get_tables()):
@@ -18,6 +19,7 @@ def __ensureVersionSystem():
     except InterfaceError:
         raise Exception("Can't find DBdata table for Database version verification.")
     return True
+
 
 def validateDatabase():
 
