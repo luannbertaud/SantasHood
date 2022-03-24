@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
 from uuid import uuid4 as guuid
 from peewee import DoesNotExist
 from hdbscan import HDBSCAN
@@ -65,7 +66,7 @@ def agregate_clusters(labels, e_uuids, extract_best=False):
     return res
 
 @needs_db
-def create_relations(): #TODO verify runID
+def create_relations(runID):
     relations = {}
     
     try:
@@ -74,7 +75,7 @@ def create_relations(): #TODO verify runID
         return False
     
     for u in users:
-        if ((u.clusterdata == {}) or ("cluster" not in u.clusterdata.keys()) or ("runID" not in u.clusterdata.keys())):
+        if ((u.clusterdata == {}) or ("cluster" not in u.clusterdata.keys()) or ("runID" not in u.clusterdata.keys()) or (u.clusterdata["runID"] != runID)):
             continue
         cl = u.clusterdata["cluster"]
         if (cl not in relations.keys()):
@@ -99,6 +100,6 @@ def create_relations(): #TODO verify runID
                 ClustersRelations.get(ClustersRelations.uuid == str(newUUID))
                 continue
             except DoesNotExist as e:
-                ClustersRelations.create(uuid=newUUID, usercluster=cl, giftclusters=relations[cl])
+                ClustersRelations.create(uuid=newUUID, usercluster=cl, giftclusters=relations[cl], runid=runID, date=datetime.now())
                 break
     return True

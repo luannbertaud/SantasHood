@@ -18,4 +18,4 @@ if __name__ == "__main__":
     runID = "theid"
     refresh_gifts_clusters(runID)
     refresh_users_clusters(runID)
-    create_relations()
+    create_relations(runID)

@@ -23,8 +23,8 @@ def encode_giftcards(cards):
     for card in cards:
         buff = []
         buff.append(card["budget"])
-        # buff.append(card["cluttering"])
-        # buff.append(0 if not card["shortlived"] else 1) # TODO verify hight dimensional
+        buff.append(card["cluttering"])
+        buff.append(0 if not card["shortlived"] else 1)
         buff.append(all_scopes.index(card["scope"]))
         for cat in card["categories"]:
             buff.append(all_categories.index(cat))
