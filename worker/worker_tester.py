@@ -5,6 +5,7 @@ import numpy as np
 from computation.clusters import compute_clusters, agregate_clusters
 from tools.graphical import show_clusters
 from controllers.giftcards import refresh_gifts_clusters
+from controllers.usercards import refresh_users_clusters
 from computation.data_tools import generate_data
 
 if __name__ == "__main__":
@@ -33,3 +34,4 @@ from pprint import pprint
 # save_giftcards(uuid_clusters, "a")
 
 refresh_gifts_clusters("truc")
+refresh_users_clusters("truc")

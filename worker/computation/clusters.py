@@ -43,7 +43,7 @@ def compute_clusters(data, min_cluster_size=None):
     agc.fit(data)
     return agc.labels_, agc
 
-def agregate_clusters(labels, e_uuids, extract_best=True):
+def agregate_clusters(labels, e_uuids, extract_best=False):
     res = {}
     
     if (len(e_uuids) != len(labels)):
@@ -56,6 +56,8 @@ def agregate_clusters(labels, e_uuids, extract_best=True):
         res[e_uuids[i]] = list(set(res[e_uuids[i]]))
     
     if (not extract_best):
+        for k in list(res.keys()):
+            res[k] = int("".join([str(x) for x in sorted(res[k])]))
         return res
     
     for k in list(res.keys()):
