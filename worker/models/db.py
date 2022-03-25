@@ -11,6 +11,7 @@ class __BaseModel(__Model):
 
 class DBdata(__BaseModel):
     version = TextField()
+    workerstate = JSONField()
 
 class UserCards(__BaseModel):
     uuid = TextField(primary_key=True)

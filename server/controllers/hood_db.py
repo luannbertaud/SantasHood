@@ -11,7 +11,7 @@ def __ensureVersionSystem():
         __DBglobals.db.create_tables([DBdata])
     query = DBdata.select()
     if (len(query) <= 0):
-        DBdata.create(version="0.0.1")
+        DBdata.create(version="0.0.1", workerstate={})
 
 def needsUpdate(currentVers, targetVers):
     return __version.parse(currentVers) < __version.parse(targetVers)
