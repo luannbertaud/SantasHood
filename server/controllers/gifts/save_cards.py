@@ -2,6 +2,7 @@
 
 from peewee import DoesNotExist
 from tools.db import needs_db
+from tools.worker import update_entries
 from models.db import GiftCards
 
 def __prevent_duplicate(card):
@@ -20,6 +21,7 @@ def save_giftcard(card):
         c = GiftCards.get(GiftCards.uuid == card["uuid"])
     except DoesNotExist as e:
         GiftCards.create(uuid=card["uuid"], name=card["name"], description=card["description"], clusterdata={}, budget=card['budget'], scope=card['scope'], cluttering=card["cluttering"], shortlived=card['shortlived'], categories=card['categories'])
+        update_entries()
         return card["uuid"]
     c.name = card["name"]
     c.description = card["description"]
@@ -29,4 +31,5 @@ def save_giftcard(card):
     c.shortlived = card["shortlived"]
     c.categories = card["categories"]
     c.save()
+    update_entries()
     return card["uuid"]

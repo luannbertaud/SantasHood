@@ -32,7 +32,22 @@ def get_last_runID():
         dbdata = DBdata.get()
     except:
         return None
-    if ((not dbdata.workerstate) or ("lastRunID" not in dbdata.workerstate.keys())):
+    if ((not dbdata.workerstate) or ("lastRunID" not in dbdata.workerstate.keys()) or (dbdata.workerstate["lastRunID"] < 0)):
         return None
     runID = dbdata.workerstate["lastRunID"]
     return runID
+
+
+@needs_db
+def update_entries(removed=False):
+    try:
+        dbdata = DBdata.get()
+    except:
+        return False
+    dbdata.workerstate = {
+        "lastRunID": dbdata.workerstate["lastRunID"] if "lastRunID" in dbdata.workerstate.keys() else -1,
+        "newEntries": dbdata.workerstate["newEntries"] if "newEntries" in dbdata.workerstate.keys() else 0,
+    }
+    dbdata.workerstate["newEntries"] += 1 if (not removed) else -1
+    dbdata.save()
+    return True
