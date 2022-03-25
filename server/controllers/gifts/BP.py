@@ -8,6 +8,7 @@ from playhouse.postgres_ext import fn
 from playhouse.shortcuts import model_to_dict
 from tools.db import needs_db
 from models.db import GiftCards, UserCards, ClustersRelations
+from tools.worker import get_last_runID
 from controllers.gifts.save_cards import save_giftcard
 
 
@@ -63,7 +64,7 @@ def __get_cost(bage, bsexe, binterests):
 
 @giftsBP.route("/searchfor", methods=["GET"])
 @needs_db
-def users_searchfor(): # TODO error handling try / excepts
+def users_searchfor():
     usercard = None
     page = request.args.get("page", 0, type=int)
     gpp = request.args.get("gpp", 10, type=int)
@@ -80,27 +81,43 @@ def users_searchfor(): # TODO error handling try / excepts
     if (uts < 1):
         uts = 1
     try:
+        rls = ClustersRelations.select()
+        if (rls.count() < 1):
+            raise Exception("Not enough relations computed for finding appropriate gifts.")
+    except Exception as e:
+        return {"code": 503, "message": str(e)}, 503
+
+    try:
         usercard = json.loads(base64.urlsafe_b64decode(request.args["usercard"]))
     except:
         return {"code": 400, "message": "Invalid usercard argument."}, 400
     if not usercard:
         return {"code": 400, "message": "Invalid usercard argument."}, 400
 
+    runID = get_last_runID()
+    if (not runID):
+        return {"code": 503, "message": "Not enough relations computed for finding appropriate gifts."}, 503
     cost = __get_cost(usercard["age"], usercard["sexe"], usercard["interests"])
-    users = UserCards.select(UserCards.clusterdata, cost.alias('cost')).order_by(cost).paginate(0, uts)
+    try:
+        users = UserCards.select(UserCards.clusterdata, cost.alias('cost')).where(UserCards.clusterdata["runID"] == runID).order_by(cost).paginate(0, uts)
+        if ((not users) or users.count() < 1):
+            raise Exception("Not enough users for finding appropriate gifts.")
+    except Exception as e:
+        return {"code": 503, "message": f"Can't find close enough users.{e}"}, 503
 
     users_clusters = [u.clusterdata["cluster"] for u in users]
-    print(users_clusters)
 
     for i in range(len(users_clusters)):
-        rls = ClustersRelations.select().where(ClustersRelations.usercluster.cast("INT") == users_clusters[i]) # TODO order by date and check runID
+        try:
+            rls = ClustersRelations.select().where((ClustersRelations.usercluster.cast("INT") == users_clusters[i]) & (ClustersRelations.runid == runID))
+        except:
+            continue
         for rl in rls:
             interesting_gift_clusters += list(rl.giftclusters) * (len(users_clusters)-i)
 
     for c in interesting_gift_clusters:
         gift_clusters_scores[c] = interesting_gift_clusters.count(c) / len(interesting_gift_clusters)
     s_gift_clusters_scores = {k: v for k, v in sorted(gift_clusters_scores.items(), key=lambda item: item[1], reverse=True)}
-    print(s_gift_clusters_scores)
 
     for k in list(s_gift_clusters_scores.keys()):
         gifts = None
@@ -116,4 +133,4 @@ def users_searchfor(): # TODO error handling try / excepts
             break
     res_gifts = res_gifts[page*gpp:(page**gpp)+gpp]
     res = [model_to_dict(g) for g in res_gifts]
-    return {"code": 200, "data": res}
+    return {"code": 200, "data": res, "metadata": s_gift_clusters_scores}
