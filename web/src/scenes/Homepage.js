@@ -4,7 +4,7 @@ import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import { motion } from 'framer-motion';
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 
 export default class Homepage extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ export default class Homepage extends React.Component {
     }
 
     loadGifts() {
-        const urlGet = 'http://172.23.0.3:5000/gifts/newcards'
+        const urlGet = 'http://172.23.0.4:5000/gifts/newcards'
 
         // axios.get(urlGet, {
         // }).then((response) => {

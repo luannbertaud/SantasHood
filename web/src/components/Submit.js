@@ -6,7 +6,7 @@ import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 import { Link, Navigate } from "react-router-dom"
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/';
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 

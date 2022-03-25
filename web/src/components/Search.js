@@ -7,7 +7,7 @@ import { Base64 } from 'js-base64';
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
@@ -63,12 +63,13 @@ export default class Homepage extends React.Component {
 
         const userToGet = {
             cards: {
-                age: this.state.age,
+                age: parseInt(this.state.age, 10),
                 sexe: this.state.sexe,
                 interests: this.state.interests,
             }
         }
-        const data = Base64.encodeURI(JSON.stringify(userToGet.cards))
+        let data = Base64.encodeURI(JSON.stringify(userToGet.cards))
+        data += "=" * data.length % 4
 
         axios.get(UserGetUrl + data)
             .then((response) => {
