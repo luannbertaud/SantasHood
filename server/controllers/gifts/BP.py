@@ -89,10 +89,10 @@ def users_searchfor():
 
     try:
         usercard = json.loads(base64.urlsafe_b64decode(request.args["usercard"]))
-    except:
-        return {"code": 400, "message": "Invalid usercard argument."}, 400
+    except Exception as e:
+        return {"code": 400, "message": f"Invalid usercard argument: {e}"}, 400
     if not usercard:
-        return {"code": 400, "message": "Invalid usercard argument."}, 400
+        return {"code": 400, "message": "Invalid usercard argument. Usercard empty."}, 400
 
     runID = get_last_runID()
     if (not runID):
