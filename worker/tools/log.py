@@ -10,7 +10,7 @@ logger = logging.getLogger("SHWorker")
 logger.setLevel(__logging_level)
 logger_ch = logging.StreamHandler()
 logger_ch.setLevel(__logging_level)
-logger_form = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+logger_form = logging.Formatter('%(asctime)s [%(threadName)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 logger_ch.setFormatter(logger_form)
 logger.addHandler(logger_ch)
 
@@ -19,7 +19,7 @@ logger_waiting.setLevel(__logging_level)
 logger_waiting_ch = logging.StreamHandler()
 logger_waiting_ch.setLevel(__logging_level)
 logger_waiting_ch.terminator = ""
-logger_waiting_form = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+logger_waiting_form = logging.Formatter('%(asctime)s [%(threadName)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 logger_waiting_ch.setFormatter(logger_waiting_form)
 logger_waiting.addHandler(logger_waiting_ch)
 
