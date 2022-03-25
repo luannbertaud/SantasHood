@@ -1,9 +1,12 @@
-import { TextField, Grid, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider } from '@mui/material';
+import { TextField, Paper, Grid, Typography, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
+import { styled } from '@mui/material/styles';
+
+import "./giftcard.css";
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
@@ -19,6 +22,12 @@ const MenuProps = {
         },
     },
 };
+
+const Item = styled(Paper)(({ theme }) => ({
+    padding: "2%",
+    textAlign: 'center',
+    backgroundColor: "rgba(230, 194, 241, 0.358)",
+  }));
 
 export default class Submit extends React.Component {
     constructor(props) {
@@ -150,152 +159,226 @@ export default class Submit extends React.Component {
             });
     }
 
-    render() {
-        return (
-            <motion.div
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                exit={{ scaleY: 0 }}
-                transition={{ duration: 0.5 }}
+    render() { return (
+            <motion.div 
+                className='giftcard-outer'
+                whileHover={{ scale: 1.1 }}
             >
-                <h1>Nik ta mere fdp</h1>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item md={6}>
-                        <form>
-                            <TextField
-                                required
-                                id="outlined-number"
-                                label="Age"
-                                type="number"
-                                value={this.state.age}
-                                onChange={event => this.onAgeChange(event)}
-
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <InputLabel id="gender-label" > Gender </InputLabel>
-                            <Select labelId="gender-label"
-                                required
-                                id="demo-multiple-name"
-                                value={this.state.sexe}
-                                onChange={event => this.onSexeChange(event)}
-                                input={< OutlinedInput label="Gender" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    names.map((name) => (
-                                        <MenuItem key={name.name}
-                                            value={name.char}>
-                                            {name.name} </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                            <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
-                            <Select labelId="categories-label"
-                                required
-                                id="demo-multiple-categories"
-                                multiple
-                                value={this.state.interests}
-                                onChange={(event) => this.onInterestsChange(event)}
-                                input={< OutlinedInput label="interests" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    options.map((option) => (
-                                        <MenuItem key={option}
-                                            value={option} >
-                                            {option}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </form>
-                    </Grid>
-                    <Grid item md={6}>
-                        <form>
-                            <TextField
-                                required
-                                id="outlined-name"
-                                label="Name"
-                                value={this.state.name}
-                                onChange={event => this.onNameChange(event)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                required
-                                id="outlined-desc"
-                                label="Description"
-                                value={this.state.description}
-                                onChange={event => this.onDescChange(event)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                required
-                                id="outlined-Budget"
-                                label="Budget"
-                                type='number'
-                                value={this.state.budget}
-                                onChange={event => this.onBudgetChange(event)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                required
-                                id="outlined-scope"
-                                label="Theme"
-                                value={this.state.scope}
-                                onChange={event => this.onScopeChange(event)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <InputLabel id="gender-label" > Taille </InputLabel>
-                            <Slider
-                                defaultValue={3}
-                                valueLabelDisplay="auto"
-                                step={1}
-                                marks
-                                min={1}
-                                max={10}
-                                value={this.state.cluttering}
-                                onChange={event => this.onClutteringChange(event)}
-                                sx={submit.sliderLength}
-                            />
-                            <InputLabel id="gender-label" > Cadeau Temporaire </InputLabel>
-                            <Checkbox
-                                size="large"
-                                checked={this.state.shortlived}
-                                onChange={(event, status) => this.onShortlivedChange(status)}
-                            />
-                            <InputLabel id="gender-label" > Catégories </InputLabel>
-                            <Select labelId="categories-label"
-                                id="demo-multiple-categories"
-                                multiple
-                                value={this.state.categories}
-                                onChange={(event) => this.onCategoriesChange(event)}
-                                input={< OutlinedInput label="Categories" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    options.map((option) => (
-                                        <MenuItem key={option}
-                                            value={option} >
-                                            {option}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </form>
-                    </Grid>
-                </Grid>
-                <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSubmit}>Soumettre votre idée !</Button>
+                <motion.div
+                    className='giftcard'
+                >
+                    <Box sx={{ flexGrow: 1, margin: "8%" }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={5}>
+                                <TextField
+                                    InputProps={{
+                                        style: {fontSize: 20},
+                                    }}
+                                    color="secondary"
+                                    fullWidth
+                                    required
+                                    id="name-field"
+                                    label="Name"
+                                />
+                            </Grid>
+                            <Grid item xs={7}>
+                                <TextField
+                                    InputProps={{
+                                        style: {fontSize: 20},
+                                    }}
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    required
+                                    color="secondary"
+                                    id="description-filed"
+                                    label="Description"
+                                />
+                            </Grid>
+                            <Grid item xs={7}>
+                                <Box>
+                                    <Typography id="input-slider" gutterBottom>
+                                        Budget {this.state.cluttering}
+                                    </Typography>
+                                    <Slider
+                                        fullWidth
+                                        defaultValue={3}
+                                        step={1}
+                                        min={1}
+                                        max={10}
+                                        value={this.state.cluttering}
+                                        onChange={event => this.onClutteringChange(event)}
+                                    />
+                                </Box>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <Box>
+                                    <Typography id="input-slider" gutterBottom>
+                                        Cluttering {this.state.cluttering}
+                                    </Typography>
+                                    <Slider
+                                        fullWidth
+                                        defaultValue={3}
+                                        step={1}
+                                        min={1}
+                                        max={10}
+                                        value={this.state.cluttering}
+                                        onChange={event => this.onClutteringChange(event)}
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </motion.div>
             </motion.div>
-        )
-    }
+    )}
+
+    // render() {
+    //     return (
+    //         <motion.div
+    //             initial={{ scaleY: 0 }}
+    //             animate={{ scaleY: 1 }}
+    //             exit={{ scaleY: 0 }}
+    //             transition={{ duration: 0.5 }}
+    //         >
+    //             <h1>Nik ta mere fdp</h1>
+    //             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+    //                 <Grid item md={6}>
+    //                     <form>
+    //                         <TextField
+    //                             required
+    //                             id="outlined-number"
+    //                             label="Age"
+    //                             type="number"
+    //                             value={this.state.age}
+    //                             onChange={event => this.onAgeChange(event)}
+
+    //                             InputLabelProps={{
+    //                                 shrink: true,
+    //                             }}
+    //                         />
+    //                         <InputLabel id="gender-label" > Gender </InputLabel>
+    //                         <Select labelId="gender-label"
+    //                             required
+    //                             id="demo-multiple-name"
+    //                             value={this.state.sexe}
+    //                             onChange={event => this.onSexeChange(event)}
+    //                             input={< OutlinedInput label="Gender" />}
+    //                             sx={submit.selectLength}
+    //                             MenuProps={MenuProps}>
+    //                             {
+    //                                 names.map((name) => (
+    //                                     <MenuItem key={name.name}
+    //                                         value={name.char}>
+    //                                         {name.name} </MenuItem>
+    //                                 ))
+    //                             }
+    //                         </Select>
+    //                         <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
+    //                         <Select labelId="categories-label"
+    //                             required
+    //                             id="demo-multiple-categories"
+    //                             multiple
+    //                             value={this.state.interests}
+    //                             onChange={(event) => this.onInterestsChange(event)}
+    //                             input={< OutlinedInput label="interests" />}
+    //                             sx={submit.selectLength}
+    //                             MenuProps={MenuProps}>
+    //                             {
+    //                                 options.map((option) => (
+    //                                     <MenuItem key={option}
+    //                                         value={option} >
+    //                                         {option}
+    //                                     </MenuItem>
+    //                                 ))
+    //                             }
+    //                         </Select>
+    //                     </form>
+    //                 </Grid>
+    //                 <Grid item md={6}>
+    //                     <form>
+    //                         <TextField
+    //                             required
+    //                             id="outlined-name"
+    //                             label="Name"
+    //                             value={this.state.name}
+    //                             onChange={event => this.onNameChange(event)}
+    //                             InputLabelProps={{
+    //                                 shrink: true,
+    //                             }}
+    //                         />
+    //                         <TextField
+    //                             required
+    //                             id="outlined-desc"
+    //                             label="Description"
+    //                             value={this.state.description}
+    //                             onChange={event => this.onDescChange(event)}
+    //                             InputLabelProps={{
+    //                                 shrink: true,
+    //                             }}
+    //                         />
+    //                         <TextField
+    //                             required
+    //                             id="outlined-Budget"
+    //                             label="Budget"
+    //                             type='number'
+    //                             value={this.state.budget}
+    //                             onChange={event => this.onBudgetChange(event)}
+    //                             InputLabelProps={{
+    //                                 shrink: true,
+    //                             }}
+    //                         />
+    //                         <TextField
+    //                             required
+    //                             id="outlined-scope"
+    //                             label="Theme"
+    //                             value={this.state.scope}
+    //                             onChange={event => this.onScopeChange(event)}
+    //                             InputLabelProps={{
+    //                                 shrink: true,
+    //                             }}
+    //                         />
+    //                         <InputLabel id="gender-label" > Taille </InputLabel>
+    //                         <Slider
+    //                             defaultValue={3}
+    //                             valueLabelDisplay="auto"
+    //                             step={1}
+    //                             marks
+    //                             min={1}
+    //                             max={10}
+    //                             value={this.state.cluttering}
+    //                             onChange={event => this.onClutteringChange(event)}
+    //                             sx={submit.sliderLength}
+    //                         />
+    //                         <InputLabel id="gender-label" > Cadeau Temporaire </InputLabel>
+    //                         <Checkbox
+    //                             size="large"
+    //                             checked={this.state.shortlived}
+    //                             onChange={(event, status) => this.onShortlivedChange(status)}
+    //                         />
+    //                         <InputLabel id="gender-label" > Catégories </InputLabel>
+    //                         <Select labelId="categories-label"
+    //                             id="demo-multiple-categories"
+    //                             multiple
+    //                             value={this.state.categories}
+    //                             onChange={(event) => this.onCategoriesChange(event)}
+    //                             input={< OutlinedInput label="Categories" />}
+    //                             sx={submit.selectLength}
+    //                             MenuProps={MenuProps}>
+    //                             {
+    //                                 options.map((option) => (
+    //                                     <MenuItem key={option}
+    //                                         value={option} >
+    //                                         {option}
+    //                                     </MenuItem>
+    //                                 ))
+    //                             }
+    //                         </Select>
+    //                     </form>
+    //                 </Grid>
+    //             </Grid>
+    //             <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSubmit}>Soumettre votre idée !</Button>
+    //         </motion.div>
+    //     )
+    // }
 }

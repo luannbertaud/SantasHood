@@ -1,0 +1,33 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    background: rgb(27, 225, 9);
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.giftcard-outer {
+    background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
+    padding: 3%;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10%;
+    width: 500px;
+    height: 500px;
+}
+  
+.giftcard {
+    background: white;
+    /* background: rgba(199, 12, 236, 0.658); */
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
