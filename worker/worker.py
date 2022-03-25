@@ -1,24 +1,18 @@
 #!/usr/bin/env python3
 
 import sys
-import random
-import numpy as np
+import signal
+from threading import enumerate
+from models.worker import Worker
 from tools.db import validateDatabase
-from tools.graphical import show_clusters
-from computation.clusters import compute_clusters
+from tools.log import *
 
 
-def test_clustering():
-    features = np.array([[random.randint(0, 100), random.randint(0, 100), random.randint(0, 100), random.randint(0, 100)]])
-
-    for i in range(0, 20):
-        tmp = []
-        for ii in range(0, 4):
-            tmp.append(random.randint(0, 100))
-        features = np.append(features, [tmp], axis=0)
-
-    labels, _ = compute_clusters(features)
-    show_clusters(labels, features)
+def signal_handler(sig, frame):
+    for t in enumerate():
+        if (not isinstance(t, Worker)):
+            continue
+        t.stop()
 
 
 if __name__ == "__main__":
@@ -26,5 +20,8 @@ if __name__ == "__main__":
         print("pong")
         exit(0)
     
+    signal.signal(signal.SIGINT, signal_handler)
     validateDatabase()
-    test_clustering()
+
+    w = Worker(checks_delay=30, entries_nb=10)
+    w.start()
