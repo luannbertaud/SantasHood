@@ -32,7 +32,7 @@ def get_last_runID():
         dbdata = DBdata.get()
     except:
         return None
-    if ((not dbdata.workerstate) or ("lastRunID" not in dbdata.workerstate.keys()) or (dbdata.workerstate["lastRunID"] < 0)):
+    if ((not dbdata.workerstate) or ("lastRunID" not in dbdata.workerstate.keys()) or (dbdata.workerstate["lastRunID"] == -1)):
         return None
     runID = dbdata.workerstate["lastRunID"]
     return runID
