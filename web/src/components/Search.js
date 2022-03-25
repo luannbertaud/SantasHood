@@ -3,7 +3,7 @@ import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput } 
 import axios from 'axios';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
-import base64url from "base64url";
+import { Base64 } from 'js-base64';
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 
@@ -34,8 +34,9 @@ export default class Homepage extends React.Component {
         this.onAgeChange = this.onAgeChange.bind(this);
         this.onSexeChange = this.onSexeChange.bind(this);
         this.onInterestsChange = this.onInterestsChange.bind(this);
-    }
 
+        this.onClickSearch = this.onClickSearch.bind(this);
+    }
 
     onAgeChange(event) {
         this.setState({
@@ -67,16 +68,14 @@ export default class Homepage extends React.Component {
                 interests: this.state.interests,
             }
         }
+        const data = Base64.encodeURI(JSON.stringify(userToGet.cards))
 
-        console.log(userToGet)
-        console.log(base64url(userToGet.cards))
-
-        // axios.get(UserGetUrl, userToGet)
-        //     .then((response) => {
-        //         console.log(response.data)
-        //     }).catch((err) => {
-        //         console.log(err.response);
-        //     });
+        axios.get(UserGetUrl + data)
+            .then((response) => {
+                console.log(response.data)
+            }).catch((err) => {
+                console.log(err.response);
+            });
     }
 
     render() {

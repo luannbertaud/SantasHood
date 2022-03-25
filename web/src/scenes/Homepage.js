@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import axios from 'axios';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import { motion } from 'framer-motion';
