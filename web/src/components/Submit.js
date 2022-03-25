@@ -1,29 +1,13 @@
-import { TextField } from '@mui/material';
+import { TextField, Grid, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Chip from '@mui/material/Chip';
-import Select from '@mui/material/Select';
+import { submit } from '../styles/styles.js'
+import { motion } from 'framer-motion';
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
-const names = ['Homme', 'Femme', 'Autres']
-
-function getStyles(name, personName, theme) {
-    return {
-        fontWeight:
-            personName.indexOf(name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
-
+const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,18 +24,18 @@ export default class Submit extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            giftUuid: undefined,
+            giftUuid: uuidv4(),
             name: undefined,
             description: undefined,
             budget: undefined,
             scope: undefined,
-            cluttering: undefined,
-            shortlived: undefined,
-            Categories: [],
+            cluttering: 3,
+            shortlived: false,
+            categories: [],
 
-            userUuid: undefined,
+            userUuid: uuidv4(),
             age: undefined,
-            sexe: undefined,
+            sexe: '',
             interests: [],
             linkedUuid: [],
         }
@@ -95,14 +79,14 @@ export default class Submit extends React.Component {
             cluttering: event.target.value
         })
     }
-    onShortlivedChange(event) {
+    onShortlivedChange(status) {
         this.setState({
-            shortlived: event.target.value
+            shortlived: status
         })
     }
     onCategoriesChange(event) {
         this.setState({
-            giftCategories: event.target.value
+            categories: event.target.value
         })
     }
     onAgeChange(event) {
@@ -118,42 +102,39 @@ export default class Submit extends React.Component {
     onInterestsChange(event) {
         this.setState({
             interests: event.target.value
-        })  
+        })
+    }
+
+    isValid() {
+        return this.state.giftUuid && this.state.name && this.state.description && this.state.budget && this.state.scope && this.state.cluttering && this.state.shortlived && this.state.categories && this.state.userUuid && this.state.age && this.state.sexe && this.state.interests;
     }
 
     onClickSubmit() {
-        console.log('I\'m in!')
         const GiftPostUrl = REACT_APP_SERV_URL + "gifts/newcards"
         const UserPostUrl = REACT_APP_SERV_URL + "users/newcards"
 
         const giftToSend = {
-            cards: [
-                {
-                    uuid: uuidv4(),
-                    name: this.state.name,
-                    description: this.state.description,
-                    budget: this.state.budget,
-                    scope: this.state.scope,
-                    cluttering: this.state.cluttering,
-                    shortlived: this.state.shortlived,
-                    categories: this.state.categories,
-                }
-            ]
+            cards: [{
+                uuid: this.state.giftUuid,
+                name: this.state.name,
+                description: this.state.description,
+                budget: parseInt(this.state.budget, 10),
+                scope: this.state.scope,
+                cluttering: this.state.cluttering,
+                shortlived: this.state.shortlived,
+                categories: this.state.categories,
+            }]
         }
 
         const userToSend = {
-            cards: [
-                {
-                    uuid: uuidv4(),
-                    age: this.state.age,
-                    sexe: this.state.sexe,
-                    categories: this.state.interests,
-                    likedgifts: [this.state.giftUuid],
-                }
-            ]
+            cards: [{
+                uuid: this.state.userUuid,
+                age: parseInt(this.state.age, 10),
+                sexe: this.state.sexe,
+                interests: this.state.interests,
+                likedgifts: [this.state.giftUuid],
+            }]
         }
-        console.log(giftToSend)
-        console.log(userToSend)
         axios.post(GiftPostUrl, giftToSend)
             .then((response) => {
                 console.log(response.data)
@@ -171,132 +152,150 @@ export default class Submit extends React.Component {
 
     render() {
         return (
-            <>
+            <motion.div
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                exit={{ scaleY: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <h1>Nik ta mere fdp</h1>
-                <div className='row'>
-                    <div className='col-lg-6'>
-                        <h2>SUBMIT USER FORM</h2>
-                        <form onSubmit={event => this.onClickSubmit(event)}>
-                            <label>
-                                Age:
-                                <input
-                                    type="number"
-                                    name="age"
-                                    value={this.state.age}
-                                    onChange={event => this.onAgeChange(event)}
-                                />
-                            </label>
-                            <InputLabel id="demo-multiple-name-label">Gender</InputLabel>
-                            <Select
-                                labelId="demo-multiple-name-label"
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                    <Grid item md={6}>
+                        <form>
+                            <TextField
+                                required
+                                id="outlined-number"
+                                label="Age"
+                                type="number"
+                                value={this.state.age}
+                                onChange={event => this.onAgeChange(event)}
+
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <InputLabel id="gender-label" > Gender </InputLabel>
+                            <Select labelId="gender-label"
+                                required
                                 id="demo-multiple-name"
                                 value={this.state.sexe}
                                 onChange={event => this.onSexeChange(event)}
-                                input={<OutlinedInput label="Gender" />}
-                                MenuProps={MenuProps}
-                            >
-                                {names.map((name) => (
-                                    <MenuItem
-                                        key={name}
-                                        value={name}
-                                    >
-                                        {name}
-                                    </MenuItem>
-                                ))}
+                                input={< OutlinedInput label="Gender" />}
+                                sx={submit.selectLength}
+                                MenuProps={MenuProps}>
+                                {
+                                    names.map((name) => (
+                                        <MenuItem key={name.name}
+                                            value={name.char}>
+                                            {name.name} </MenuItem>
+                                    ))
+                                }
                             </Select>
-                            <InputLabel id="demo-multiple-name-label">Categories</InputLabel>
-                            <Select
-                                labelId="demo-multiple-categories-label"
+                            <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
+                            <Select labelId="categories-label"
+                                required
                                 id="demo-multiple-categories"
                                 multiple
                                 value={this.state.interests}
                                 onChange={(event) => this.onInterestsChange(event)}
-                                input={<OutlinedInput label="Categories" />}
-                                MenuProps={MenuProps}
-                            >
-                                {options.map((option) => (
-                                    <MenuItem
-                                        key={option}
-                                        value={option}
-                                    >
-                                        {option}
-                                    </MenuItem>
-                                ))}
+                                input={< OutlinedInput label="interests" />}
+                                sx={submit.selectLength}
+                                MenuProps={MenuProps}>
+                                {
+                                    options.map((option) => (
+                                        <MenuItem key={option}
+                                            value={option} >
+                                            {option}
+                                        </MenuItem>
+                                    ))
+                                }
                             </Select>
-                            <p>{this.state.age}</p>
-                            <p>{this.state.sexe}</p>
-                            <p>{this.state.userCategories}</p>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <label>Name
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.name}
-                                    onChange={event => this.onNameChange(event)}
-                                />
-                            </label>
-                            <label>description
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.description}
-                                    onChange={event => this.onDescChange(event)}
-                                />
-                            </label>
-                            <label>budget
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.budget}
-                                    onChange={event => this.onBudgetChange(event)}
-                                />
-                            </label>
-                            <label>scope
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.scope}
-                                    onChange={event => this.onScopeChange(event)}
-                                />
-                            </label>
-                            <label>cluttering
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.cluttering}
-                                    onChange={event => this.onClutteringChange(event)}
-                                />
-                            </label>
-                            <label>shortlived
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.shortlived}
-                                    onChange={event => this.onShortlivedChange(event)}
-                                />
-                            </label>
-                            <label>giftCategories
-                                <input
-                                    className="form-control"
-                                    autoComplete="off"
-                                    value={this.state.categories}
-                                    onChange={event => this.onCategoriesChange(event)}
-                                />
-                            </label>
-                            <p>{this.state.name}</p>
-                            <p>{this.state.description}</p>
-                            <p>{this.state.budget}</p>
-                            <p>{this.state.scope}</p>
-                            <p>{this.state.cluttering}</p>
-                            <p>{this.state.shortlived}</p>
-                            <p>{this.state.categories}</p>
-                            <input type="submit" value="Submit" />
                         </form>
-                    </div>
-                </div>
-            </>
+                    </Grid>
+                    <Grid item md={6}>
+                        <form>
+                            <TextField
+                                required
+                                id="outlined-name"
+                                label="Name"
+                                value={this.state.name}
+                                onChange={event => this.onNameChange(event)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <TextField
+                                required
+                                id="outlined-desc"
+                                label="Description"
+                                value={this.state.description}
+                                onChange={event => this.onDescChange(event)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <TextField
+                                required
+                                id="outlined-Budget"
+                                label="Budget"
+                                type='number'
+                                value={this.state.budget}
+                                onChange={event => this.onBudgetChange(event)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <TextField
+                                required
+                                id="outlined-scope"
+                                label="Theme"
+                                value={this.state.scope}
+                                onChange={event => this.onScopeChange(event)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            <InputLabel id="gender-label" > Taille </InputLabel>
+                            <Slider
+                                defaultValue={3}
+                                valueLabelDisplay="auto"
+                                step={1}
+                                marks
+                                min={1}
+                                max={10}
+                                value={this.state.cluttering}
+                                onChange={event => this.onClutteringChange(event)}
+                                sx={submit.sliderLength}
+                            />
+                            <InputLabel id="gender-label" > Cadeau Temporaire </InputLabel>
+                            <Checkbox
+                                size="large"
+                                checked={this.state.shortlived}
+                                onChange={(event, status) => this.onShortlivedChange(status)}
+                            />
+                            <InputLabel id="gender-label" > Catégories </InputLabel>
+                            <Select labelId="categories-label"
+                                id="demo-multiple-categories"
+                                multiple
+                                value={this.state.categories}
+                                onChange={(event) => this.onCategoriesChange(event)}
+                                input={< OutlinedInput label="Categories" />}
+                                sx={submit.selectLength}
+                                MenuProps={MenuProps}>
+                                {
+                                    options.map((option) => (
+                                        <MenuItem key={option}
+                                            value={option} >
+                                            {option}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </form>
+                    </Grid>
+                </Grid>
+                <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSubmit}>Soumettre votre idée !</Button>
+            </motion.div>
         )
     }
 }
