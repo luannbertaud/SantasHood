@@ -1,17 +1,19 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import axios from 'axios';
+import { Box, Grid, Paper, Typography, ButtonBase } from '@mui/material';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import { motion } from 'framer-motion';
+import Snowfall from 'react-snowfall'
+import { FallingEmojis } from 'falling-emojis';
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 
 export default class Homepage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             giftList: [],
+            redirect: undefined,
         }
     }
 
@@ -20,7 +22,7 @@ export default class Homepage extends React.Component {
     }
 
     loadGifts() {
-        const urlGet = 'http://172.23.0.3:5000/gifts/newcards'
+        const urlGet = 'http://172.23.0.4:5000/gifts/newcards'
 
         // axios.get(urlGet, {
         // }).then((response) => {
@@ -33,41 +35,46 @@ export default class Homepage extends React.Component {
     }
 
     render() {
-        console.log('ALO')
         return (
-            <motion.div
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                exit={{ scaleY: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <h1>HELLO OU QUOII ?</h1>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid item md={6}>
-                        <Box sx={{ textAlign: 'center' }}>
-                            <motion.div sx={{ textAlign: 'center' }} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.9 }} onClick={{}}>
-                                <Link to={"/submit"}>
-                                    <Paper elevation={20} sx={{ height: '100px', width: '200px' }}>
-                                        {"Go to Submit !"}
-                                    </Paper>
-                                </Link>
-                            </motion.div>
-                        </Box>
+            <>
+                <FallingEmojis emoji={'🌲'} />
+                <Box sx={{p: 2, my: 6}} component={motion.div} whileHover={{ scale: 1.2, rotate: 9 }} whileTap={{rotate: 180}}>
+                    <Typography fontFamily={"Rubik"} fontSize={34} textAlign={"center"}>
+                        Santa's Hood 🎅
+                    </Typography>
+                </Box>
+                {this.state.redirect !== undefined ? <Navigate to={this.state.redirect}/> : null}
+                <Grid sx={{mt: 4}} container direction="row" justifyContent="space-evenly" alignItems="center">
+                    <Grid item xs={3} sx={{ textAlign: 'center' }} onClick={() => this.setState({redirect: 'search'})}>
+                        <Paper sx={{ mb: 4, mt: 2, borderRadius: 8}} elevation={3} component={motion.div} whileHover={{scale: 1.05, transition: { duration: 0.3 }}} whileTap={{ scale: 0.9 }}>
+                            <ButtonBase sx={{ borderRadius: 8 }} onClick={this.onClickAddAction}>
+                                <Box sx={{ width: '100%', p: 3, borderRadius: 8 }}>
+                                <Typography fontFamily={"Poppins"} fontWeight={500} fontSize={24}>
+                                    Search a gift 🔎
+                                </Typography>
+                                <Typography sx={{mt: 2}} fontFamily={"Poppins"} fontWeight={300} fontSize={18}>
+                                    Search the perfect gift for your friends or family !
+                                </Typography>
+                                </Box>
+                            </ButtonBase>
+                        </Paper>
                     </Grid>
-                    <Grid item md={6}>
-                        <Box sx={{ textAlign: 'center' }}>
-                            <motion.div sx={{ textAlign: 'center' }} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.9 }} onClick={{}}>
-                                <Link to={"/search"}>
-                                    <Paper elevation={20} sx={{ height: '100px', width: '200px' }}>
-                                        {"Go to Search !"}
-                                    </Paper>
-                                </Link>
-                            </motion.div>
-                        </Box>
+                    <Grid item xs={3} sx={{ textAlign: 'center' }} onClick={() => this.setState({redirect: 'submit'})}>
+                        <Paper sx={{ mb: 4, mt: 2, borderRadius: 8 }} elevation={3} component={motion.div} whileHover={{scale: 1.05, transition: { duration: 0.3 }}} whileTap={{ scale: 0.9 }}>
+                            <ButtonBase sx={{ borderRadius: 8 }} onClick={this.onClickAddAction}>
+                                <Box sx={{ width: '100%', p: 3, borderRadius: 8 }}>
+                                <Typography fontFamily={"Poppins"} fontWeight={500} fontSize={24}>
+                                    Submit a gift idea 🎁
+                                </Typography>
+                                <Typography sx={{mt: 2}} fontFamily={"Poppins"} fontWeight={300} fontSize={18}>
+                                    Submit a gift idea you already got or something you want !
+                                </Typography>
+                                </Box>
+                            </ButtonBase>
+                        </Paper>
                     </Grid>
                 </Grid>
-
-            </motion.div>
+            </>
         )
     }
 }

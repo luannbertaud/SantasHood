@@ -1,11 +1,12 @@
 import React from 'react';
-import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput } from '@mui/material';
+import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput, Box, Paper, Typography, ButtonBase } from '@mui/material';
 import axios from 'axios';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import base64url from "base64url";
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
@@ -27,21 +28,32 @@ export default class Homepage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            age: undefined,
+            age: 0,
+            ageError: undefined,
             sexe: '',
+            valid: false,
+            redirect: undefined,
             interests: []
         }
         this.onAgeChange = this.onAgeChange.bind(this);
         this.onSexeChange = this.onSexeChange.bind(this);
         this.onInterestsChange = this.onInterestsChange.bind(this);
+        this.onClickSearch = this.onClickSearch.bind(this);
     }
 
 
     onAgeChange(event) {
         this.setState({
-            age: event.target.value
-        })
+            age: event.target.value,
+            ageError: undefined,
+        });
+
+        const value = parseInt(event.target.value, 10);
+
+        if (value <= 0 || value > 120)
+            this.setState({ageError: 'Invalid age ! must be > 0 and < 120'});
     }
+
     onSexeChange(event) {
         this.setState({
             sexe: event.target.value
@@ -54,7 +66,9 @@ export default class Homepage extends React.Component {
     }
 
     isValid() {
-        return this.state.age && this.state.sexe && this.state.interests.length !== 0;
+        if (this.state.ageError !== undefined || this.state.sexe === '' || this.state.interests.length === 0)
+            return false;
+        return true
     }
 
     onClickSearch() {
@@ -62,7 +76,7 @@ export default class Homepage extends React.Component {
 
         const userToGet = {
             cards: {
-                age: this.state.age,
+                age: parseInt(this.state.age, 10),
                 sexe: this.state.sexe,
                 interests: this.state.interests,
             }
@@ -80,72 +94,71 @@ export default class Homepage extends React.Component {
     }
 
     render() {
-        console.log('ALO')
         return (
-            <motion.div
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                exit={{ scaleY: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <Grid sx={{ textAlign: 'center' }}>
-                    <h1>SEARCH PAGE</h1>
-                    <Grid>
-                        <form>
-                            <TextField
-                                required
-                                id="outlined-number"
-                                label="Age"
-                                type="number"
-                                value={this.state.age}
-                                onChange={event => this.onAgeChange(event)}
-
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <InputLabel id="gender-label" > Gender </InputLabel>
-                            <Select labelId="gender-label"
-                                required
-                                id="demo-multiple-name"
-                                value={this.state.sexe}
-                                onChange={event => this.onSexeChange(event)}
-                                input={< OutlinedInput label="Gender" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    names.map((name) => (
-                                        <MenuItem key={name.name}
-                                            value={name.char}>
-                                            {name.name} </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                            <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
-                            <Select labelId="categories-label"
-                                required
-                                id="demo-multiple-categories"
-                                multiple
-                                value={this.state.interests}
-                                onChange={(event) => this.onInterestsChange(event)}
-                                input={< OutlinedInput label="interests" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    options.map((option) => (
-                                        <MenuItem key={option}
-                                            value={option} >
-                                            {option}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </form>
-                    </Grid>
-                    <br></br>
-                    <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSearch}>Chercher</Button>
-                </Grid>
-            </motion.div>
+            <Box sx={{textAlign: 'center'}}>
+                {this.state.redirect !== undefined ? <Navigate to={this.state.redirect}/> : null}
+                <Box sx={{mx: 2, mt: 2, textAlign: 'start'}} onClick={() => {this.setState({redirect: '/'})}}>
+                    <ArrowBackIosIcon />
+                </Box>
+                <Box sx={{mb: 6, mt: 2}}>
+                    <Typography fontFamily={"Poppins"} fontSize={30} fontWeight={500}>
+                        Search a gift 🔎
+                    </Typography>
+                </Box>
+                <Box>
+                    <TextField
+                        required
+                        error={this.state.ageError !== undefined}
+                        id="outlined-number"
+                        label="Age"
+                        type="number"
+                        helperText={this.state.ageError}
+                        value={this.state.age}
+                        onChange={event => this.onAgeChange(event)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <InputLabel id="gender-label" > Gender </InputLabel>
+                    <Select labelId="gender-label"
+                        required
+                        id="demo-multiple-name"
+                        value={this.state.sexe}
+                        onChange={event => this.onSexeChange(event)}
+                        input={< OutlinedInput label="Gender" />}
+                        sx={submit.selectLength}
+                        MenuProps={MenuProps}>
+                        {
+                            names.map((name) => (
+                                <MenuItem key={name.name}
+                                    value={name.char}>
+                                    {name.name} </MenuItem>
+                            ))
+                        }
+                    </Select>
+                    <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
+                    <Select labelId="categories-label"
+                        required
+                        id="demo-multiple-categories"
+                        multiple
+                        value={this.state.interests}
+                        onChange={(event) => this.onInterestsChange(event)}
+                        input={< OutlinedInput label="interests" />}
+                        sx={submit.selectLength}
+                        MenuProps={MenuProps}>
+                        {
+                            options.map((option) => (
+                                <MenuItem key={option}
+                                    value={option} >
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }
+                    </Select>
+                </Box>
+                <br></br>
+                <Button disabled={!this.isValid()} variant="contained" onClick={() => this.onClickSearch}>Chercher</Button>
+            </Box>
         )
     }
 }
