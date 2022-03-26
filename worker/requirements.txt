@@ -1,7 +1,8 @@
-peewee==3.14.8
-python-dotenv==0.19.2
-psycopg2-binary==2.9.2
-packaging==20.9
-scikit-learn==1.0.1
-numpy==1.19.5
+hdbscan==0.8.28
 matplotlib==3.5.1
+numpy==1.21.5
+packaging==20.9
+peewee==3.14.8
+psycopg2==2.9.2
+python-dotenv==0.19.2
+scikit_learn==1.0.2

@@ -3,12 +3,12 @@ import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput, B
 import axios from 'axios';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
-import base64url from "base64url";
+import { Base64 } from 'js-base64';
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
@@ -40,7 +40,6 @@ export default class Homepage extends React.Component {
         this.onInterestsChange = this.onInterestsChange.bind(this);
         this.onClickSearch = this.onClickSearch.bind(this);
     }
-
 
     onAgeChange(event) {
         this.setState({
@@ -81,16 +80,15 @@ export default class Homepage extends React.Component {
                 interests: this.state.interests,
             }
         }
+        let data = Base64.encodeURI(JSON.stringify(userToGet.cards))
+        data += "=" * data.length % 4
 
-        console.log(userToGet)
-        console.log(base64url(userToGet.cards))
-
-        // axios.get(UserGetUrl, userToGet)
-        //     .then((response) => {
-        //         console.log(response.data)
-        //     }).catch((err) => {
-        //         console.log(err.response);
-        //     });
+        axios.get(UserGetUrl + data)
+            .then((response) => {
+                console.log(response.data)
+            }).catch((err) => {
+                console.log(err.response);
+            });
     }
 
     render() {

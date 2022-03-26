@@ -9,8 +9,9 @@ import { TransferList } from "./Categories";
 import Giftcard from "./Giftcard";
 
 // import "./giftcard.css";
+import { Link, Navigate } from "react-router-dom"
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
+const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/';
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
@@ -35,7 +36,7 @@ export default class Submit extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            giftUuid: uuidv4(),
+            giftUuid: undefined,
             name: undefined,
             description: undefined,
             budget: undefined,
@@ -44,7 +45,7 @@ export default class Submit extends React.Component {
             shortlived: false,
             categories: [],
 
-            userUuid: uuidv4(),
+            userUuid: undefined,
             age: undefined,
             sexe: '',
             interests: [],
@@ -117,7 +118,7 @@ export default class Submit extends React.Component {
     }
 
     isValid() {
-        return this.state.giftUuid && this.state.name && this.state.description && this.state.budget && this.state.scope && this.state.cluttering && this.state.shortlived && this.state.categories && this.state.userUuid && this.state.age && this.state.sexe && this.state.interests;
+        return this.state.name && this.state.description && this.state.budget && this.state.scope && this.state.cluttering && this.state.categories.length !== 0 && this.state.age && this.state.sexe && this.state.interests.length !== 0;
     }
 
     onClickSubmit() {
@@ -126,7 +127,7 @@ export default class Submit extends React.Component {
 
         const giftToSend = {
             cards: [{
-                uuid: this.state.giftUuid,
+                uuid: uuidv4(),
                 name: this.state.name,
                 description: this.state.description,
                 budget: parseInt(this.state.budget, 10),
@@ -139,11 +140,11 @@ export default class Submit extends React.Component {
 
         const userToSend = {
             cards: [{
-                uuid: this.state.userUuid,
+                uuid: uuidv4(),
                 age: parseInt(this.state.age, 10),
                 sexe: this.state.sexe,
                 interests: this.state.interests,
-                likedgifts: [this.state.giftUuid],
+                likedgifts: [giftToSend.cards[0].uuid],
             }]
         }
         axios.post(GiftPostUrl, giftToSend)
@@ -156,6 +157,7 @@ export default class Submit extends React.Component {
         axios.post(UserPostUrl, userToSend)
             .then((response) => {
                 console.log(response.data)
+                alert('Successfully submitted')
             }).catch((err) => {
                 console.log(err.response);
             });
