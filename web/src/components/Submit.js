@@ -1,12 +1,14 @@
-import { TextField, Paper, Grid, Typography, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box } from '@mui/material';
+import { TextField, Paper, Grid, Typography, FormControlLabel, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 import { styled } from '@mui/material/styles';
+import { TransferList } from "./Categories";
+import Giftcard from "./Giftcard";
 
-import "./giftcard.css";
+// import "./giftcard.css";
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
 const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
@@ -160,77 +162,9 @@ export default class Submit extends React.Component {
     }
 
     render() { return (
-            <motion.div 
-                className='giftcard-outer'
-                whileHover={{ scale: 1.1 }}
-            >
-                <motion.div
-                    className='giftcard'
-                >
-                    <Box sx={{ flexGrow: 1, margin: "8%" }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={5}>
-                                <TextField
-                                    InputProps={{
-                                        style: {fontSize: 20},
-                                    }}
-                                    color="secondary"
-                                    fullWidth
-                                    required
-                                    id="name-field"
-                                    label="Name"
-                                />
-                            </Grid>
-                            <Grid item xs={7}>
-                                <TextField
-                                    InputProps={{
-                                        style: {fontSize: 20},
-                                    }}
-                                    fullWidth
-                                    multiline
-                                    rows={3}
-                                    required
-                                    color="secondary"
-                                    id="description-filed"
-                                    label="Description"
-                                />
-                            </Grid>
-                            <Grid item xs={7}>
-                                <Box>
-                                    <Typography id="input-slider" gutterBottom>
-                                        Budget {this.state.cluttering}
-                                    </Typography>
-                                    <Slider
-                                        fullWidth
-                                        defaultValue={3}
-                                        step={1}
-                                        min={1}
-                                        max={10}
-                                        value={this.state.cluttering}
-                                        onChange={event => this.onClutteringChange(event)}
-                                    />
-                                </Box>
-                            </Grid>
-                            <Grid item xs={5}>
-                                <Box>
-                                    <Typography id="input-slider" gutterBottom>
-                                        Cluttering {this.state.cluttering}
-                                    </Typography>
-                                    <Slider
-                                        fullWidth
-                                        defaultValue={3}
-                                        step={1}
-                                        min={1}
-                                        max={10}
-                                        value={this.state.cluttering}
-                                        onChange={event => this.onClutteringChange(event)}
-                                    />
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </motion.div>
-            </motion.div>
+
+        <Giftcard/>
+
     )}
 
     // render() {
