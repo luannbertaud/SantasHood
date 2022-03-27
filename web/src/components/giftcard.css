@@ -1,4 +1,4 @@
-body {
+/* body {
     width: 100vw;
     height: 100vh;
     background: rgb(27, 225, 9);
@@ -8,7 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
 
 .giftcard-outer {
     background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);

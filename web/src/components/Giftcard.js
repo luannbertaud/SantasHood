@@ -43,20 +43,18 @@ export default class Giftcard extends React.Component {
 
     render() { 
         return (
-            <Grid container spacing={0}
+            <Box
                 component={motion.div}
                 whileHover={{ scale: 1.1 }}
                 sx={{
-                    height:"500px",
-                    width:"1000px",
+                    display: "flex"
                 }}
             >
-                <Grid
-                    item
-                    xs={6}
+                <Box
                     sx={{
-                        height: "100%",
-                        width: "100%",
+                        height:"500px",
+                        width:"500px",
+                        float: "left",
                     }}
                 >
 
@@ -198,19 +196,19 @@ export default class Giftcard extends React.Component {
                             </Card>
                         </Box>
                     </Box>
-                </Grid>
-                <Grid
-                    item
-                    xs={2}
+                </Box>
+                <Box
                     sx={{
                         mt: "3%",
                         ml: "1%",
-                        maxHeight: "70%",
-                        scrollbarColor: "grey transparent",
+                        maxHeight: "calc(500px / 1.5)",
+                        height: "70%",
+                        scrollbarColor: "auto transparent",
                         overflowY: "auto",
                         overflowX: "hidden",
+                        float: "left",
                         display: "flex",
-                        paddingRight: "0.5%",
+                        borderRadius: "10% / 4%",
                     }}
                 >
                     <AvailableCategories
@@ -222,8 +220,8 @@ export default class Giftcard extends React.Component {
                         content={this.state.categories}
                         setContent={(c) => {this.setState({categories: c})}}
                     />
-                </Grid>
-            </Grid>
+                </Box>
+            </Box>
         );
     }
 }

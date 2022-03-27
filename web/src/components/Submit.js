@@ -1,4 +1,4 @@
-import { TextField, Paper, Grid, Typography, FormControlLabel, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box } from '@mui/material';
+import { TextField, Paper, Grid, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Typography, FormControlLabel, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box, useControlled } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { styled } from '@mui/material/styles';
 import { TransferList } from "./Categories";
 import Giftcard from "./Giftcard";
+import { FallingEmojis } from 'falling-emojis';
 
 // import "./giftcard.css";
 import { Link, Navigate } from "react-router-dom"
@@ -50,6 +51,8 @@ export default class Submit extends React.Component {
             sexe: '',
             interests: [],
             linkedUuid: [],
+            giftdialog: false,
+            giftsdata: [],
         }
 
         this.onNameChange = this.onNameChange.bind(this);
@@ -65,7 +68,19 @@ export default class Submit extends React.Component {
         this.onInterestsChange = this.onInterestsChange.bind(this);
 
         this.onClickSubmit = this.onClickSubmit.bind(this);
+
+        this.addGiftData = this.addGiftData.bind(this);
     }
+
+    addGiftData(newgift) {
+        this.setState(
+            {
+                ...this.state,
+                giftsdata: [...this.state.giftsdata, newgift]
+            }
+        );
+    }
+
     onNameChange(event) {
         this.setState({
             name: event.target.value
@@ -163,158 +178,64 @@ export default class Submit extends React.Component {
             });
     }
 
-    render() { return (
-
-        <Giftcard/>
-
-    )}
-
-    // render() {
-    //     return (
-    //         <motion.div
-    //             initial={{ scaleY: 0 }}
-    //             animate={{ scaleY: 1 }}
-    //             exit={{ scaleY: 0 }}
-    //             transition={{ duration: 0.5 }}
-    //         >
-    //             <h1>Nik ta mere fdp</h1>
-    //             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-    //                 <Grid item md={6}>
-    //                     <form>
-    //                         <TextField
-    //                             required
-    //                             id="outlined-number"
-    //                             label="Age"
-    //                             type="number"
-    //                             value={this.state.age}
-    //                             onChange={event => this.onAgeChange(event)}
-
-    //                             InputLabelProps={{
-    //                                 shrink: true,
-    //                             }}
-    //                         />
-    //                         <InputLabel id="gender-label" > Gender </InputLabel>
-    //                         <Select labelId="gender-label"
-    //                             required
-    //                             id="demo-multiple-name"
-    //                             value={this.state.sexe}
-    //                             onChange={event => this.onSexeChange(event)}
-    //                             input={< OutlinedInput label="Gender" />}
-    //                             sx={submit.selectLength}
-    //                             MenuProps={MenuProps}>
-    //                             {
-    //                                 names.map((name) => (
-    //                                     <MenuItem key={name.name}
-    //                                         value={name.char}>
-    //                                         {name.name} </MenuItem>
-    //                                 ))
-    //                             }
-    //                         </Select>
-    //                         <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
-    //                         <Select labelId="categories-label"
-    //                             required
-    //                             id="demo-multiple-categories"
-    //                             multiple
-    //                             value={this.state.interests}
-    //                             onChange={(event) => this.onInterestsChange(event)}
-    //                             input={< OutlinedInput label="interests" />}
-    //                             sx={submit.selectLength}
-    //                             MenuProps={MenuProps}>
-    //                             {
-    //                                 options.map((option) => (
-    //                                     <MenuItem key={option}
-    //                                         value={option} >
-    //                                         {option}
-    //                                     </MenuItem>
-    //                                 ))
-    //                             }
-    //                         </Select>
-    //                     </form>
-    //                 </Grid>
-    //                 <Grid item md={6}>
-    //                     <form>
-    //                         <TextField
-    //                             required
-    //                             id="outlined-name"
-    //                             label="Name"
-    //                             value={this.state.name}
-    //                             onChange={event => this.onNameChange(event)}
-    //                             InputLabelProps={{
-    //                                 shrink: true,
-    //                             }}
-    //                         />
-    //                         <TextField
-    //                             required
-    //                             id="outlined-desc"
-    //                             label="Description"
-    //                             value={this.state.description}
-    //                             onChange={event => this.onDescChange(event)}
-    //                             InputLabelProps={{
-    //                                 shrink: true,
-    //                             }}
-    //                         />
-    //                         <TextField
-    //                             required
-    //                             id="outlined-Budget"
-    //                             label="Budget"
-    //                             type='number'
-    //                             value={this.state.budget}
-    //                             onChange={event => this.onBudgetChange(event)}
-    //                             InputLabelProps={{
-    //                                 shrink: true,
-    //                             }}
-    //                         />
-    //                         <TextField
-    //                             required
-    //                             id="outlined-scope"
-    //                             label="Theme"
-    //                             value={this.state.scope}
-    //                             onChange={event => this.onScopeChange(event)}
-    //                             InputLabelProps={{
-    //                                 shrink: true,
-    //                             }}
-    //                         />
-    //                         <InputLabel id="gender-label" > Taille </InputLabel>
-    //                         <Slider
-    //                             defaultValue={3}
-    //                             valueLabelDisplay="auto"
-    //                             step={1}
-    //                             marks
-    //                             min={1}
-    //                             max={10}
-    //                             value={this.state.cluttering}
-    //                             onChange={event => this.onClutteringChange(event)}
-    //                             sx={submit.sliderLength}
-    //                         />
-    //                         <InputLabel id="gender-label" > Cadeau Temporaire </InputLabel>
-    //                         <Checkbox
-    //                             size="large"
-    //                             checked={this.state.shortlived}
-    //                             onChange={(event, status) => this.onShortlivedChange(status)}
-    //                         />
-    //                         <InputLabel id="gender-label" > Catégories </InputLabel>
-    //                         <Select labelId="categories-label"
-    //                             id="demo-multiple-categories"
-    //                             multiple
-    //                             value={this.state.categories}
-    //                             onChange={(event) => this.onCategoriesChange(event)}
-    //                             input={< OutlinedInput label="Categories" />}
-    //                             sx={submit.selectLength}
-    //                             MenuProps={MenuProps}>
-    //                             {
-    //                                 options.map((option) => (
-    //                                     <MenuItem key={option}
-    //                                         value={option} >
-    //                                         {option}
-    //                                     </MenuItem>
-    //                                 ))
-    //                             }
-    //                         </Select>
-    //                     </form>
-    //                 </Grid>
-    //             </Grid>
-    //             <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSubmit}>Soumettre votre idée !</Button>
-    //         </motion.div>
-    //     )
-    // }
+    render() {
+        console.log(this.state.giftsdata);
+        return (
+            <React.Fragment>
+                <FallingEmojis emoji={'🌲'}/>
+                <Button
+                    variant="text"
+                    onClick={
+                        (_) => { this.setState({...this.state, giftdialog: true}) }
+                    }
+                >
+                    New Gift
+                </Button>
+                <Dialog
+                    fullWidth={true}
+                    maxWidth="xl"
+                    scroll="body"
+                    open={this.state.giftdialog}
+                    onClose={() => { this.setState({...this.state, giftdialog: false}) }}
+                    sx={{
+                        overflow: "visible",
+                        display:"flex",
+                        justifyContent: "center",
+                        scrollbarColor: "auto transparent",
+                        "& .MuiDialog-paper": {
+                            display:"inline-block",
+                            backgroundColor: "transparent",
+                        },
+                    }}
+                    BackdropProps={{
+                        style: { backgroundColor: 'rgba(255, 255, 255, 0.4)' }
+                    }}
+                >
+                <DialogContent
+                    sx={{
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        overflow: "visible",
+                        display:"flex",
+                        alignItems: "center",
+                        textALign: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            overflow: "visible",
+                            my: "5%",
+                            mx: "10%",
+                        }}
+                    >
+                        <Giftcard/>
+                    </Box>
+                </DialogContent>
+                <DialogActions sx={{ float: "right", mb: "1%", mr: "1%" }}>
+                    <Button onClick={() => { this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, {"title": "yessay"}]}) }}>Validate</Button>
+                </DialogActions>
+                </Dialog>
+            </React.Fragment>
+        );
+    }
 }
