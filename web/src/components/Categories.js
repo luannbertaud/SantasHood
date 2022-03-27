@@ -18,7 +18,7 @@ function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, onItemClick, ItemIcon, viewFunc) {
+function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, onItemClick, ItemIcon, viewFunc, elevation=0) {
     return (
         <Box 
             sx={{
@@ -39,6 +39,7 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                     backgroundColor: backgroundColor,
                     margin: 0,
                 }}
+                elevation={elevation}
             >
                 <CardHeader
                     sx={{ px: 1, py: 1, textAlign: "center" }}
@@ -57,12 +58,12 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                     component="div"
                     role="list"
                 >
-                    {items.map((value) => {
+                    {items.map((value, i) => {
                         let labelId = `transfer-list-all-item-${value}-label`;
 
                         return (
                         <ListItem
-                            key={value}
+                            key={i}
                             role="listitem"
                             button
                             onClick={onItemClick(value)}
@@ -252,7 +253,8 @@ export class GiftsList extends React.Component {
                     this.backgroundColor,
                     this.handleRemove,
                     CardGiftcardIcon,
-                    this.viewFunc
+                    this.viewFunc,
+                    10
                 )}
             </Box>
         );

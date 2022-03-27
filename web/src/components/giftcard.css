@@ -14,12 +14,32 @@
     background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
     padding: 3%;
     border-radius: 10%;
+    width: 69%;
+    height: 92.5%;
+    float: left;
+}
+
+.giftcard-outer-free {
+    background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
+    padding: 3%;
+    border-radius: 10%;
+    float: left;
 }
   
 .giftcard {
     background: rgba(255, 255, 255, 0.9);
     width: 96%;
     height: 98%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 2%;
+    padding-bottom: 0;
+}
+
+.giftcard-free {
+    background: rgba(255, 255, 255, 0.9);
     align-items: center;
     text-align: center;
     display: flex;
