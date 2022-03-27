@@ -21,7 +21,6 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
     return (
         <Box 
             sx={{
-                overflow: "auto",
                 maxHeight: "100%",
                 maxWidth: "100%",
                 height: "100%",
@@ -36,7 +35,8 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                     minheight: 0,
                     padding: "3%",
                     my: "3%",
-                    backgroundColor: backgroundColor
+                    backgroundColor: backgroundColor,
+                    margin: 0,
                 }}
             >
                 <CardHeader

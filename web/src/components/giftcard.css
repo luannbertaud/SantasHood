@@ -13,27 +13,17 @@ body {
 .giftcard-outer {
     background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
     padding: 3%;
-    /* margin: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;*/
     border-radius: 10%;
-    width: 500px;
-    height: 500px;
-    padding-bottom: 1%;
 }
   
 .giftcard {
     background: rgba(255, 255, 255, 0.9);
-    /* background: rgb(255, 0, 0); */
     width: 96%;
-    height: 96%;
-    justify-content: center;
+    height: 98%;
     align-items: center;
     text-align: center;
     display: flex;
     flex-direction: column;
     padding: 2%;
     padding-bottom: 0;
-    margin: 0px;
 }
