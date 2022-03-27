@@ -17,7 +17,7 @@ function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-function createList(title, items, fontSize, fontSizeSecondary, onItemClick, ItemIcon) {
+function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, onItemClick, ItemIcon) {
     return (
         <Box 
             sx={{
@@ -36,6 +36,7 @@ function createList(title, items, fontSize, fontSizeSecondary, onItemClick, Item
                     minheight: 0,
                     padding: "3%",
                     my: "3%",
+                    backgroundColor: backgroundColor
                 }}
             >
                 <CardHeader
@@ -48,7 +49,7 @@ function createList(title, items, fontSize, fontSizeSecondary, onItemClick, Item
                 <Divider />
                 <List
                     sx={{
-                        bgcolor: 'background.paper',
+                        bgcolor: backgroundColor,
                         overflow: 'auto',
                     }}
                     dense
@@ -64,7 +65,7 @@ function createList(title, items, fontSize, fontSizeSecondary, onItemClick, Item
                             role="listitem"
                             button
                             onClick={onItemClick(value)}
-                            sx={{ width: "100%", height: "100%", textAlign: "center" }}
+                            sx={{ width: "100%", height: "100%", textAlign: "center", backgroundColor: backgroundColor }}
                             dense
                             disablePadding
                         >
@@ -95,6 +96,7 @@ export class CurrentCategories extends React.Component {
         this.fullWidth = props.fullWidth;
         this.fontSize = props.fontSize;
         this.fontSizeSecondary = props.fontSizeSecondary;
+        this.backgroundColor = props.backgroundColor
         this.removeCallback = props.removeCallback
         this.setContent = props.setContent
         this.handleRemove = this.handleRemove.bind(this);
@@ -132,6 +134,7 @@ export class CurrentCategories extends React.Component {
                     not(this.state.ogcontent, this.state.content),
                     this.fontSize,
                     this.fontSizeSecondary,
+                    this.backgroundColor,
                     this.handleRemove,
                     DeleteIcon
                 )}
@@ -151,6 +154,7 @@ export class AvailableCategories extends React.Component {
         this.fullWidth = props.fullWidth;
         this.fontSize = props.fontSize;
         this.fontSizeSecondary = props.fontSizeSecondary;
+        this.backgroundColor = props.backgroundColor
         this.setContent = props.setContent
         this.handleAdd = this.handleAdd.bind(this);
     }
@@ -186,6 +190,7 @@ export class AvailableCategories extends React.Component {
                     this.state.content,
                     this.fontSize,
                     this.fontSizeSecondary,
+                    this.backgroundColor,
                     this.handleAdd,
                     AddCircle
                 )}
