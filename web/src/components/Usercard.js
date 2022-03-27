@@ -54,10 +54,10 @@ export default class Usercard extends React.Component {
                 whileHover={{ scale: 1 }}
                 sx={{
                     height:"100%",
-                    width:"178%",
+                    width:"134%",
                 }}
             >
-                <Box className='giftcard-outer-free' sx={{ height: "50%", width: "50%" }}>
+                <Box className='giftcard-outer'>
                     <Card
                         className='giftcard'
                         sx={{
@@ -72,19 +72,21 @@ export default class Usercard extends React.Component {
                                 minHeight: 0,
                             }}
                             title={
-                                <Typography fontFamily={"Rubik"} fontSize={26} textAlign={"center"} >
-                                    You
-                                    {/* <div style={{
+                                <div>
+                                    <Typography fontFamily={"Rubik"} fontSize={28} textAlign={"center"} sx={{ float: "left" }}>
+                                        About You
+                                    </Typography>
+                                    <div style={{
                                         backgroundColor: "#cccc00",
                                         borderRadius: "50px",
-                                        height: "45px",
+                                        height: "40px",
                                         width: "35px",
                                         float:"right",
                                         marginLeft: "5px",
                                     }}>
                                         👀
-                                    </div> */}
-                                </Typography>
+                                    </div>
+                                </div>
                             }
                         />
                         <Divider sx={{borderWidth: "1px", width: "100%"}} />
@@ -99,17 +101,18 @@ export default class Usercard extends React.Component {
                                 width: "100%",
                             }}
                         >
-                            <Grid container spacing={2} sx={{ height: "100%", width: "100%", marginTop: 0, marginLeft: 0, overflow: "auto", paddingBottom: "2%" }} >
+                            <Grid container spacing={2} sx={{ height: "100%", width: "100%", marginTop: 0, marginLeft: 0, scrollbarColor: "grey transparent", overflow: "auto", paddingBottom: "2%" }} >
                                 <Grid item xs={7} >
-                                    <Grid container spacing={0} >
+                                    <Grid container spacing={2} >
                                         <Grid item xs={12} >
-                                            <FormControl sx={{width:"90%"}}>
+                                            <FormControl sx={{ width:"90%" }}>
                                                 <InputLabel id="demo-simple-select-label">Age *</InputLabel>
                                                 <Select
                                                     value={this.state.age}
                                                     label="Age *"
                                                     onChange={(e) => {this.setState({...this.state, age: e.target.value})}}
-                                                    >
+                                                    sx={{ fontSize: '20px' }}
+                                                >
                                                         {Array.from(Array(120).keys()).map((name) => (
                                                             <MenuItem
                                                                 key={name}
@@ -121,13 +124,14 @@ export default class Usercard extends React.Component {
                                                 </Select>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} sx={{ marginTop: "15%" }} >
+                                        <Grid item xs={12} >
                                             <FormControl sx={{ width:"90%" }}>
                                                 <InputLabel id="demo-simple-select-label">Sexe *</InputLabel>
                                                 <Select
                                                     value={this.state.sexe}
                                                     label="Sexe *"
                                                     onChange={(e) => {this.setState({...this.state, sexe: e.target.value})}}
+                                                    sx={{ fontSize: '20px' }}
                                                 >
                                                     <MenuItem key={"F"} value={"F"} >F</MenuItem>
                                                     <MenuItem key={"M"} value={"M"} >M</MenuItem>
@@ -141,9 +145,9 @@ export default class Usercard extends React.Component {
                                     <CurrentCategories
                                         fullWidth="100%"
                                         fullHeight="100%"
-                                        fontSize="12px"
-                                        fontSizeSecondary="10px"
-                                        backgroundColor="rgb(245, 170, 250)"
+                                        fontSize="20px"
+                                        fontSizeSecondary="15px"
+                                        backgroundColor="#F8B229"
                                         content={this.state.categories}
                                         setContent={(c) => {this.setState({categories: c})}}
                                     />
@@ -156,22 +160,22 @@ export default class Usercard extends React.Component {
                     sx={{
                         mt: "3%",
                         maxHeight: "50%",
-                        width: "20%",
-                        scrollbarColor: "rgb(235, 160, 240) transparent",
+                        width: "24%",
+                        scrollbarColor: "#5b9775 transparent",
                         overflowY: "scroll",
                         overflowX: "hidden",
                         float: "left",
                         borderRadius: "10% / 4%",
                         direction: "rtl",
-                        scrollbarWidth: "thin"
+                        scrollbarWidth: "thin",
                     }}
                 >
                     <AvailableCategories
                         fullWidth="100%"
                         fullHeight="100%"
-                        fontSize="12px"
-                        fontSizeSecondary="10px"
-                        backgroundColor="rgb(245, 170, 250)"
+                        fontSize="20px"
+                        fontSizeSecondary="15px"
+                        backgroundColor="#5b9775"
                         content={this.state.categories}
                         setContent={(c) => {this.setState({categories: c})}}
                     />

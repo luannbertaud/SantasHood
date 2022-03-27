@@ -90,7 +90,7 @@ export default class Giftcard extends React.Component {
                                 }
                             }}
                         >
-                            <Grid container spacing={2} sx={{ height: "100%", width: "100%", marginTop: 0, marginLeft: 0, overflow: "auto", paddingBottom: "2%" }} >
+                            <Grid container spacing={2} sx={{ height: "100%", width: "100%", marginTop: 0, marginLeft: 0, scrollbarColor: "grey transparent", overflow: "auto", paddingBottom: "2%" }} >
                                 <Grid item xs={12}>
                                     <TextField
                                         InputProps={{
@@ -150,9 +150,9 @@ export default class Giftcard extends React.Component {
                                                         defaultChecked
                                                         sx={{
                                                             '& .MuiSvgIcon-root': { fontSize: 28 },
-                                                            color: "#ff008c",
+                                                            color: "#146B3A",
                                                             '&.Mui-checked': {
-                                                            color: "#ff008c",
+                                                            color: "#146B3A",
                                                             },
                                                         }}
                                                     />
@@ -171,9 +171,9 @@ export default class Giftcard extends React.Component {
                                     <CurrentCategories
                                         fullWidth="100%"
                                         fullHeight="100%"
-                                        fontSize="12px"
-                                        fontSizeSecondary="10px"
-                                        backgroundColor="rgb(245, 170, 250)"
+                                        fontSize="15px"
+                                        fontSizeSecondary="12px"
+                                        backgroundColor="#F8B229"
                                         content={this.state.categories}
                                         setContent={(c) => {this.setState({categories: c})}}
                                     />
@@ -187,7 +187,7 @@ export default class Giftcard extends React.Component {
                         mt: "6%",
                         maxHeight: "50%",
                         width: "24%",
-                        scrollbarColor: "rgb(235, 160, 240) transparent",
+                        scrollbarColor: "#5b9775 transparent",
                         overflowY: "scroll",
                         overflowX: "hidden",
                         float: "left",
@@ -199,9 +199,9 @@ export default class Giftcard extends React.Component {
                     <AvailableCategories
                         fullWidth="100%"
                         fullHeight="100%"
-                        fontSize="12px"
-                        fontSizeSecondary="10px"
-                        backgroundColor="rgb(245, 170, 250)"
+                        fontSize="15px"
+                        fontSizeSecondary="12px"
+                        backgroundColor="#5b9775"
                         content={this.state.categories}
                         setContent={(c) => {this.setState({categories: c})}}
                     />

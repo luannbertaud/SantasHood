@@ -28,6 +28,7 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                 width: "100%",
                 minWidth: 0,
                 minheight: 0,
+                direction: "ltr",
             }}
         >
             <Card
@@ -44,7 +45,7 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                 <CardHeader
                     sx={{ px: 1, py: 1, textAlign: "center" }}
                     title={title}
-                    titleTypographyProps={{fontSize: fontSize }}
+                    titleTypographyProps={{fontSize: fontSize, fontFamily: "Rubik" }}
                     subheader={`${items.length}`}
                     subheaderTypographyProps={{fontSize: fontSizeSecondary }}
                 />

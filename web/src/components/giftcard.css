@@ -9,9 +9,13 @@
     justify-content: center;
     align-items: center;
 } */
+body {
+    margin: 0;
+    padding: 0;
+}
 
 .giftcard-outer {
-    background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
+    background: linear-gradient(135deg, #5b9775 0%, #165B33 100%);
     padding: 3%;
     border-radius: 10%;
     width: 69%;
@@ -20,14 +24,15 @@
 }
 
 .giftcard-outer-free {
-    background: linear-gradient(135deg, #ff008c 0%, rgb(211, 9, 225) 100%);
+    background: linear-gradient(135deg, #5b9775 60%, #165B33 100%);
     padding: 3%;
     border-radius: 10%;
     float: left;
 }
   
 .giftcard {
-    background: rgba(255, 255, 255, 0.9);
+    /* background: rgba(255, 255, 255, 0.9); */
+    background: linear-gradient(135deg, #f8b3295e 0%, #bb25285e 100%);
     width: 96%;
     height: 98%;
     align-items: center;
@@ -39,7 +44,7 @@
 }
 
 .giftcard-free {
-    background: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, #f8b3295e 0%, #bb25285e 100%);
     align-items: center;
     text-align: center;
     display: flex;

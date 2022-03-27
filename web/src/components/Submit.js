@@ -35,8 +35,11 @@ const MenuProps = {
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#cccc00',
+            main: '#F8B229',
         },
+        secondary: {
+            main: '#146B3A',
+        }
     }
   });
 
@@ -198,111 +201,129 @@ export default class Submit extends React.Component {
     }
 
     render() {
-        console.log(this.state.snackalert);
         return (
-            <ThemeProvider theme={theme}>
-                <FallingEmojis emoji={'🌲'}/>
-                <Box sx={{p: 2, my: 6}}>
-                    <Typography fontFamily={"Rubik"} fontSize={34} textAlign={"center"}>
-                        What did Santa brings you ? 🎉
-                    </Typography>
-                </Box>
+            <ThemeProvider theme={theme} >
                 <Box
-                    sx={{
-                        justifyContent: "center",
-                        display: "flex",
-                        flexDirection: "row",
-                    }}
+                    sx={{ display: "flex", flexDirection: "column", position: "absolute", height: "100vh", width: "100vw"}}
                 >
-                    <Box
-                        sx={{
-                            width: "20vw",
-                            height: "25vw",
-                            marginRight: "calc(34*20vw/100)",
-                        }}
-                    >
-                        <Usercard/>
+                    <FallingEmojis emoji={'🌲'} />
+                    <Box sx={{p: 2, my: 6}}>
+                        <Typography fontFamily={"Rubik"} fontSize={34} textAlign={"center"}>
+                            What did Santa brings you ? 🎉
+                        </Typography>
                     </Box>
                     <Box
                         sx={{
-                            textAlign: "center",
-                            marginLeft: "2%",
+                            flexGrow: 1,
+                            display: "flex",
+                            // alignItems: "center",
+                            justifyContent: "center",
+                            paddingTop: "5%",
                         }}
                     >
-                        <IconButton
-                            aria-label="addGift"
-                            color="primary"
-                            onClick={ () => { this.setState({...this.state, giftdialog: true}) }}
+                        <Box
+                            sx={{
+                                width: "25vw",
+                                height: "25vw",
+                                marginRight: "calc(34*25vw/100)",
+                                textAlign: "center",
+                            }}
                         >
-                            🎁 <AddCircle fontSize="medium"/>
-                        </IconButton>
-                        <GiftsList
-                            fullWidth="10vw"
-                            fontSize="12px"
-                            fontSizeSecondary="10px"
-                            backgroundColor="rgb(245, 170, 250)"
-                            viewFunc={(val) => val.title}
-                            content={this.state.giftsdata}
-                            setContent={(c) => {this.setState({giftsdata: c})}}
-                        />
+                            <Usercard/>
+                        </Box>
+                        <Box
+                            sx={{
+                                textAlign: "center",
+                                marginLeft: "2%",
+                            }}
+                        >
+                            <IconButton
+                                aria-label="addGift"
+                                color="primary"
+                                onClick={ () => { this.setState({...this.state, giftdialog: true}) }}
+                            >
+                                <Typography fontFamily={"Rubik"} fontSize={38} textAlign={"center"} >
+                                    🎁 
+                                </Typography>
+                                <AddCircle fontSize="large"/>
+                            </IconButton>
+                            <GiftsList
+                                fullWidth="15vw"
+                                fontSize="28px"
+                                fontSizeSecondary="20px"
+                                backgroundColor="#c95153"
+                                viewFunc={(val) => val.title}
+                                content={this.state.giftsdata}
+                                setContent={(c) => {this.setState({giftsdata: c})}}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-                <Dialog
-                    fullWidth={true}
-                    maxWidth="xl"
-                    scroll="body"
-                    open={this.state.giftdialog}
-                    onClose={() => { this.setState({...this.state, giftdialog: false}) }}
-                    sx={{
-                        overflow: "visible",
-                        display:"flex",
-                        justifyContent: "center",
-                        scrollbarColor: "auto transparent",
-                        "& .MuiDialog-paper": {
-                            display:"inline-block",
-                            backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                        },
-                    }}
-                    BackdropProps={{
-                        style: { backgroundColor: 'rgba(255, 255, 255, 0.4)' }
-                    }}
-                >
-                <DialogContent
-                    sx={{
-                        overflow: "visible",
-                        display:"flex",
-                        alignItems: "center",
-                        textALign: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Box
+                    <Dialog
+                        fullWidth={true}
+                        maxWidth="xl"
+                        scroll="body"
+                        open={this.state.giftdialog}
+                        onClose={() => { this.setState({...this.state, giftdialog: false}) }}
                         sx={{
-                            width: "70vh",
-                            height: "70vh",
-                            marginRight: "calc(34*70vh/100)"
+                            overflow: "visible",
+                            display:"flex",
+                            justifyContent: "center",
+                            scrollbarColor: "auto transparent",
+                            "& .MuiDialog-paper": {
+                                display:"inline-block",
+                                backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                            },
                         }}
-                    > 
-                        <Giftcard/>
-                    </Box>
-                </DialogContent>
-                <DialogActions sx={{ float: "right", mb: "1%", mr: "1%" }}>
-                    <Button onClick={() => { this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, {"title": "yessay"}], snackalert: true, snackalertmessage: "Gift registered"}) }}>Validate</Button>
-                </DialogActions>
-                </Dialog>
-                <Snackbar
-                    open={this.state.snackalert}
-                    autoHideDuration={3000}
-                    onClose={() => {return this.state.snackalert ? this.setState({...this.state, snackalert: false}) : null}}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    TransitionComponent={(props) => <Slide {...props} direction="down" /> }
-                    sx={{ opacity: 0.8 }}
-                    ClickAwayListenerProps={{ onClickAway: false }}
-                >
-                    <Alert onClose={() => {return this.state.snackalert ? this.setState({...this.state, snackalert: false}) : null}} severity="success" sx={{ width: '100%' }}>
-                        {this.state.snackalertmessage}
-                    </Alert>
-                </Snackbar>
+                        BackdropProps={{
+                            style: { backgroundColor: 'rgba(255, 255, 255, 0.4)' }
+                        }}
+                    >
+                    <DialogContent
+                        sx={{
+                            overflow: "visible",
+                            display:"flex",
+                            alignItems: "center",
+                            textALign: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: "70vh",
+                                height: "70vh",
+                                marginRight: "calc(34*70vh/100)"
+                            }}
+                        > 
+                            <Giftcard/>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions sx={{ float: "right", mb: "1%", mr: "1%" }}>
+                        <Button onClick={() => { this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, {"title": "yessay"}], snackalert: true, snackalertmessage: "Gift registered"}) }}>Validate</Button>
+                    </DialogActions>
+                    </Dialog>
+                    <Snackbar
+                        open={this.state.snackalert}
+                        autoHideDuration={3000}
+                        onClose={() => {return this.state.snackalert ? this.setState({...this.state, snackalert: false}) : null}}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        TransitionComponent={(props) => <Slide {...props} direction="down" /> }
+                        sx={{
+                            opacity: 0.8,
+                            "& .MuiAlert-root": {
+                                fontSize: 20,
+                                alignItems: "center",
+                            },
+                            "& .MuiSvgIcon-root": {
+                                fontSize: 20,
+                            },
+                        }}
+                        ClickAwayListenerProps={{ onClickAway: false }}
+                    >
+                        <Alert onClose={() => {return this.state.snackalert ? this.setState({...this.state, snackalert: false}) : null}} severity="success" sx={{ width: '100%' }}>
+                            {this.state.snackalertmessage}
+                        </Alert>
+                    </Snackbar>
+                </Box>
             </ThemeProvider>
         );
     }
