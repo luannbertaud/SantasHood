@@ -1,14 +1,16 @@
-import { TextField, Paper, Grid, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Typography, FormControlLabel, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box, useControlled } from '@mui/material';
+import { TextField, Paper, Grid, Dialog, IconButton, DialogActions, DialogTitle, DialogContent, DialogContentText, Typography, FormControlLabel, InputLabel, MenuItem, Select, OutlinedInput, Button, Checkbox, Slider, Box, useControlled } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import { submit } from '../styles/styles.js'
 import { motion } from 'framer-motion';
 import { styled } from '@mui/material/styles';
-import { TransferList } from "./Categories";
+import { GiftsList } from "./Categories";
 import Giftcard from "./Giftcard";
 import { FallingEmojis } from 'falling-emojis';
 
+import AddCircle from '@mui/icons-material/AddCircle';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 // import "./giftcard.css";
 import { Link, Navigate } from "react-router-dom"
 
@@ -26,6 +28,14 @@ const MenuProps = {
         },
     },
 };
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#cccc00',
+        },
+    }
+  });
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: "2%",
@@ -181,16 +191,50 @@ export default class Submit extends React.Component {
     render() {
         console.log(this.state.giftsdata);
         return (
-            <React.Fragment>
+            <ThemeProvider theme={theme}>
                 <FallingEmojis emoji={'🌲'}/>
-                <Button
-                    variant="text"
-                    onClick={
-                        (_) => { this.setState({...this.state, giftdialog: true}) }
-                    }
+                <Box sx={{p: 2, my: 6}}>
+                    <Typography fontFamily={"Rubik"} fontSize={34} textAlign={"center"}>
+                        What did Santa brings you ? 🎉
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                        justifyContent: "center",
+                        display: "flex",
+                        flexDirection: "row",
+                    }}
                 >
-                    New Gift
-                </Button>
+                    <Box
+                        sx={{
+                            width: "100px",
+                            height: "100px",
+                            backgroundColor: "red",
+                        }}
+                    >
+
+                    </Box>
+                    <Box sx={{ textAlign: "center", flexDirection: "column" }}
+                    >
+                        <IconButton
+                            aria-label="addGift"
+                            color="primary"
+                            onClick={ () => { this.setState({...this.state, giftdialog: true}) }
+                            }
+                        >
+                            🎁 <AddCircle fontSize="medium"/>
+                        </IconButton>
+                        <GiftsList
+                            fullWidth="10vw"
+                            fontSize="12px"
+                            fontSizeSecondary="10px"
+                            backgroundColor="rgb(245, 170, 250)"
+                            viewFunc={(val) => val.title}
+                            content={this.state.giftsdata}
+                            setContent={(c) => {this.setState({giftsdata: c})}}
+                        />
+                    </Box>
+                </Box>
                 <Dialog
                     fullWidth={true}
                     maxWidth="xl"
@@ -213,7 +257,7 @@ export default class Submit extends React.Component {
                 >
                 <DialogContent
                     sx={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.85)',
                         overflow: "visible",
                         display:"flex",
                         alignItems: "center",
@@ -235,7 +279,7 @@ export default class Submit extends React.Component {
                     <Button onClick={() => { this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, {"title": "yessay"}]}) }}>Validate</Button>
                 </DialogActions>
                 </Dialog>
-            </React.Fragment>
+            </ThemeProvider>
         );
     }
 }

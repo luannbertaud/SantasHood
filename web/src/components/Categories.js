@@ -12,12 +12,13 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircle from '@mui/icons-material/AddCircle';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, onItemClick, ItemIcon) {
+function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, onItemClick, ItemIcon, viewFunc) {
     return (
         <Box 
             sx={{
@@ -74,7 +75,7 @@ function createList(title, items, fontSize, fontSizeSecondary, backgroundColor, 
                                     <ItemIcon/>
                                 </IconButton>
                             </ListItemIcon>
-                            <ListItemText id={labelId} primary={`List item ${value + 1}`} primaryTypographyProps={{fontSize: fontSize}} sx={{ pr: 1 }} />
+                            <ListItemText id={labelId} primary={`${viewFunc ? viewFunc(value) : value}`} primaryTypographyProps={{fontSize: fontSize}} sx={{ pr: 1 }} />
                         </ListItem>
                         );
                     })}
@@ -193,6 +194,65 @@ export class AvailableCategories extends React.Component {
                     this.backgroundColor,
                     this.handleAdd,
                     AddCircle
+                )}
+            </Box>
+        );
+    };
+}
+
+
+export class GiftsList extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            content: this.props.content,
+        }
+        this.fullHeight = props.fullHeight;
+        this.fullWidth = props.fullWidth;
+        this.fontSize = props.fontSize;
+        this.fontSizeSecondary = props.fontSizeSecondary;
+        this.backgroundColor = props.backgroundColor
+        this.viewFunc = props.viewFunc
+        this.setContent = props.setContent
+        this.handleRemove = this.handleRemove.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.content !== prevProps.content) {
+            this.setState({content: this.props.content});
+        }
+    }
+
+    handleRemove = (value) => () => {
+        this.setContent(not(this.state.content, [value]))
+    };
+
+    render(){
+        return (
+            <Box
+                className='giftslist'
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: 0,
+                    margin: 0,
+                    height: this.fullHeight,
+                    width: this.fullWidth,
+                }}
+            >
+                {createList(
+                    'Gifts',
+                    this.state.content,
+                    this.fontSize,
+                    this.fontSizeSecondary,
+                    this.backgroundColor,
+                    this.handleRemove,
+                    CardGiftcardIcon,
+                    this.viewFunc
                 )}
             </Box>
         );
