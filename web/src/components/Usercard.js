@@ -50,8 +50,6 @@ export default class Usercard extends React.Component {
     render() { 
         return (
             <Box
-                component={motion.div}
-                whileHover={{ scale: 1 }}
                 sx={{
                     height:"100%",
                     width:"134%",

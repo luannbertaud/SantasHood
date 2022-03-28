@@ -50,7 +50,18 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    return (
+        <MuiAlert
+            component={motion.div}
+            animate={{ rotate: [0, -10, 95, 180], opacity: [1, 1, 1, 0] }}
+            initial={true}
+            transition={{ ease: "easeIn", duration: 3, times: [0.72, 0.8, 0.9, 1]}}
+            elevation={6}
+            ref={ref}
+            variant="filled"
+            {...props}
+        />
+    );
 });
 
 export default class Submit extends React.Component {
@@ -216,12 +227,14 @@ export default class Submit extends React.Component {
                         sx={{
                             flexGrow: 1,
                             display: "flex",
-                            // alignItems: "center",
                             justifyContent: "center",
                             paddingTop: "5%",
                         }}
                     >
                         <Box
+                            component={motion.div}
+                            animate={{ rotate: -2 }}
+                            whileHover={{ rotate: 0 }}
                             sx={{
                                 width: "25vw",
                                 height: "25vw",
@@ -232,15 +245,22 @@ export default class Submit extends React.Component {
                             <Usercard/>
                         </Box>
                         <Box
+                            component={motion.div}
+                            animate={{ x: [400, 0] }}
+                            transition={{ type: "inertia", velocity: -400}}
                             sx={{
                                 textAlign: "center",
                                 marginLeft: "2%",
                             }}
                         >
                             <IconButton
+                                component={motion.div}
+                                animate={{ x: [80, -80, 80] }}
+                                initial={true}
+                                transition={{ ease: "easeInOut", duration: 6, repeat: Infinity }}
                                 aria-label="addGift"
                                 color="primary"
-                                onClick={ () => { this.setState({...this.state, giftdialog: true}) }}
+                                onClick={ () => { this.setState({giftdialog: true}) }}
                             >
                                 <Typography fontFamily={"Rubik"} fontSize={38} textAlign={"center"} >
                                     🎁 
@@ -259,6 +279,9 @@ export default class Submit extends React.Component {
                         </Box>
                     </Box>
                     <Dialog
+                        component={motion.div}
+                        animate={{ opacity: [0, 1], scale: [0.1, 1] }}
+                        transition={{ ease: "backInOut", duration: 0.6 }}
                         fullWidth={true}
                         maxWidth="xl"
                         scroll="body"
@@ -317,7 +340,7 @@ export default class Submit extends React.Component {
                                 fontSize: 20,
                             },
                         }}
-                        ClickAwayListenerProps={{ onClickAway: false }}
+                        ClickAwayListenerProps={{ onClickAway: () => {} }}
                     >
                         <Alert onClose={() => {return this.state.snackalert ? this.setState({...this.state, snackalert: false}) : null}} severity="success" sx={{ width: '100%' }}>
                             {this.state.snackalertmessage}
