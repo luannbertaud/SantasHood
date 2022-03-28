@@ -50,6 +50,7 @@ services:
       dockerfile: Dockerfile
       args:
         SERV_ENABLE_SSL: ${SERV_ENABLE_SSL}
+        SERV_URL: ${SERV_URL}
     depends_on:
       - server
     ports:

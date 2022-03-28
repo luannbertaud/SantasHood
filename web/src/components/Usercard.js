@@ -39,7 +39,7 @@ export default class Usercard extends React.Component {
         super(props)
         this.state = {
             uuid: uuidv4(),
-            age: "",
+            age: 0,
             sexe: "",
             rootcategories: [0, 1, 2, 3, 8, 9, 10, 11, 12, 13],
             avcategories: [],
@@ -124,7 +124,7 @@ export default class Usercard extends React.Component {
                                                 <Select
                                                     value={this.state.age}
                                                     label="Age *"
-                                                    onChange={(e) => {this.setState({...this.state, age: e.target.value})}}
+                                                    onChange={(e) => {this.setState({...this.state, age: parseInt(e.target.value)})}}
                                                     sx={{ fontSize: '20px' }}
                                                 >
                                                         {Array.from(Array(120).keys()).map((name) => (
