@@ -10,7 +10,12 @@ import {
     Card,
     CardHeader,
     CardContent,
-    Divider
+    Divider,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    Container
 } from '@mui/material';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,27 +31,53 @@ const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "rgba(230, 194, 241, 0.358)",
   }));
 
+function not(a, b) {
+return a.filter((value) => b.indexOf(value) === -1);
+}
+
 export default class Giftcard extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            giftUuid: uuidv4(),
+            uuid: uuidv4(),
             name: undefined,
             description: undefined,
-            budget: undefined,
-            scope: undefined,
+            budget: 0,
             cluttering: 3,
+            scope: "",
             shortlived: false,
-            categories: [0, 1, 2, 3, 8, 9, 10, 11, 12, 13],
+            rootcategories: [0, 1, 2, 3, 8, 9, 10, 11, 12, 13],
+            avcategories: [],
+            categories: [],
         }
+        this.state.avcategories = this.state.rootcategories;
+        this.generateCardData = this.generateCardData.bind(this);
+        this._child = React.createRef();
+        this._props = props;
     }
 
-    render() { 
+
+    generateCardData() {
+        return({
+            uuid: this.state.uuid,
+            name: this.state.name,
+            description: this.state.description,
+            budget: this.state.budget,
+            scope: this.state.scope,
+            cluttering: this.state.cluttering,
+            shortlived: this.state.shortlived,
+            categories: this.state.categories,
+        });
+    }
+
+    render() {
         return (
             <Box
+                ref={this._child}
                 component={motion.div}
                 whileHover={{ scale: 1 }}
                 sx={{
+                    ...this._props.sx,
                     height:"100%",
                     width:"134%",
                 }}
@@ -77,6 +108,7 @@ export default class Giftcard extends React.Component {
                                     required
                                     id="name-field"
                                     label="Name"
+                                    onBlur={(e) => { this.setState({...this.state, name: e.target.value}) }}
                                 />
                             }
                         />
@@ -107,22 +139,23 @@ export default class Giftcard extends React.Component {
                                         color="secondary"
                                         id="description-filed"
                                         label="Description"
+                                        onBlur={(e) => { this.setState({...this.state, description: e.target.value}) }}
                                     />
                                 </Grid>
                                 <Grid item xs={7} >
-                                    <Grid container spacing={0} >
+                                    <Grid container spacing={1} >
                                         <Grid item xs={12} >
                                             <Box>
                                                 <Typography id="input-slider">
-                                                    Budget {this.state.cluttering}
+                                                    Budget {this.state.budget}
                                                 </Typography>
                                                 <Slider
                                                     defaultValue={3}
                                                     step={1}
                                                     min={1}
                                                     max={10}
-                                                    value={this.state.cluttering}
-                                                    onChange={event => this.onClutteringChange(event)}
+                                                    value={this.state.budget}
+                                                    onChange={(e) => {this.setState({...this.state, budget: e.target.value})}}
                                                 />
                                             </Box>
                                         </Grid>
@@ -137,17 +170,35 @@ export default class Giftcard extends React.Component {
                                                     min={1}
                                                     max={10}
                                                     value={this.state.cluttering}
-                                                    onChange={event => this.onClutteringChange(event)}
+                                                    onChange={(e) => {this.setState({...this.state, cluttering: e.target.value})}}
                                                 />
                                             </Box>
+                                        </Grid>
+                                        <Grid item xs={12} >
+                                            <FormControl sx={{ width:"80%" }}>
+                                                <InputLabel id="demo-simple-select-label">Scope *</InputLabel>
+                                                <Select
+                                                    value={this.state.scope}
+                                                    label="Scope *"
+                                                    onChange={(e) => {this.setState({...this.state, scope: e.target.value})}}
+                                                    sx={{ fontSize: '18px' }}
+                                                >
+                                                        {["Family", "Personal", "Group"].map((name, i) => (
+                                                            <MenuItem
+                                                                key={i}
+                                                                value={name}
+                                                            >
+                                                                {name}
+                                                            </MenuItem>
+                                                        ))}
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <FormControlLabel
                                             sx={{ fontSize: 28 }}
-                                                value="end"
                                                 control={
                                                     <Checkbox
-                                                        defaultChecked
                                                         sx={{
                                                             '& .MuiSvgIcon-root': { fontSize: 28 },
                                                             color: "#146B3A",
@@ -155,6 +206,7 @@ export default class Giftcard extends React.Component {
                                                             color: "#146B3A",
                                                             },
                                                         }}
+                                                        onChange={(e) => {console.log(e.target.checked); this.setState({...this.state, shortlived: e.target.checked})}}
                                                     />
                                                 }
                                                 labelPlacement="end"
@@ -174,8 +226,8 @@ export default class Giftcard extends React.Component {
                                         fontSize="15px"
                                         fontSizeSecondary="12px"
                                         backgroundColor="#F8B229"
-                                        content={this.state.categories}
-                                        setContent={(c) => {this.setState({categories: c})}}
+                                        content={this.state.avcategories}
+                                        setContent={(c) => {this.setState({avcategories: c, categories: not(this.state.rootcategories, c)})}}
                                     />
                                 </Grid>
                             </Grid>
@@ -202,8 +254,8 @@ export default class Giftcard extends React.Component {
                         fontSize="15px"
                         fontSizeSecondary="12px"
                         backgroundColor="#5b9775"
-                        content={this.state.categories}
-                        setContent={(c) => {this.setState({categories: c})}}
+                        content={this.state.avcategories}
+                        setContent={(c) => {this.setState({avcategories: c, categories: not(this.state.rootcategories, c)})}}
                     />
                 </Box>
             </Box>
