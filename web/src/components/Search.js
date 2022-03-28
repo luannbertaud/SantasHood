@@ -69,8 +69,9 @@ export default class Homepage extends React.Component {
             }
         }
         let data = Base64.encodeURI(JSON.stringify(userToGet.cards))
-        data += "=" * data.length % 4
-
+        for (let i = 0; i < data.length % 4; i++) {
+            data += '='
+        }
         axios.get(UserGetUrl + data)
             .then((response) => {
                 console.log(response.data)
@@ -82,70 +83,63 @@ export default class Homepage extends React.Component {
     render() {
         console.log('ALO')
         return (
-            <motion.div
-                initial={{ scaleY: 0 }}
-                animate={{ scaleY: 1 }}
-                exit={{ scaleY: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <Grid sx={{ textAlign: 'center' }}>
-                    <h1>SEARCH PAGE</h1>
-                    <Grid>
-                        <form>
-                            <TextField
-                                required
-                                id="outlined-number"
-                                label="Age"
-                                type="number"
-                                value={this.state.age}
-                                onChange={event => this.onAgeChange(event)}
+            <Grid sx={{ textAlign: 'center' }}>
+                <h1>SEARCH PAGE</h1>
+                <Grid>
+                    <form>
+                        <TextField
+                            required
+                            id="outlined-number"
+                            label="Age"
+                            type="number"
+                            value={this.state.age}
+                            onChange={event => this.onAgeChange(event)}
 
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <InputLabel id="gender-label" > Gender </InputLabel>
-                            <Select labelId="gender-label"
-                                required
-                                id="demo-multiple-name"
-                                value={this.state.sexe}
-                                onChange={event => this.onSexeChange(event)}
-                                input={< OutlinedInput label="Gender" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    names.map((name) => (
-                                        <MenuItem key={name.name}
-                                            value={name.char}>
-                                            {name.name} </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                            <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
-                            <Select labelId="categories-label"
-                                required
-                                id="demo-multiple-categories"
-                                multiple
-                                value={this.state.interests}
-                                onChange={(event) => this.onInterestsChange(event)}
-                                input={< OutlinedInput label="interests" />}
-                                sx={submit.selectLength}
-                                MenuProps={MenuProps}>
-                                {
-                                    options.map((option) => (
-                                        <MenuItem key={option}
-                                            value={option} >
-                                            {option}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </form>
-                    </Grid>
-                    <br></br>
-                    <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSearch}>Chercher</Button>
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <InputLabel id="gender-label" > Gender </InputLabel>
+                        <Select labelId="gender-label"
+                            required
+                            id="demo-multiple-name"
+                            value={this.state.sexe}
+                            onChange={event => this.onSexeChange(event)}
+                            input={< OutlinedInput label="Gender" />}
+                            sx={submit.selectLength}
+                            MenuProps={MenuProps}>
+                            {
+                                names.map((name) => (
+                                    <MenuItem key={name.name}
+                                        value={name.char}>
+                                        {name.name} </MenuItem>
+                                ))
+                            }
+                        </Select>
+                        <InputLabel id="categories-label" > Centers d'intérets </InputLabel>
+                        <Select labelId="categories-label"
+                            required
+                            id="demo-multiple-categories"
+                            multiple
+                            value={this.state.interests}
+                            onChange={(event) => this.onInterestsChange(event)}
+                            input={< OutlinedInput label="interests" />}
+                            sx={submit.selectLength}
+                            MenuProps={MenuProps}>
+                            {
+                                options.map((option) => (
+                                    <MenuItem key={option}
+                                        value={option} >
+                                        {option}
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </form>
                 </Grid>
-            </motion.div>
+                <br></br>
+                <Button disabled={!this.isValid()} variant="contained" onClick={this.onClickSearch}>Chercher</Button>
+            </Grid>
         )
     }
 }
