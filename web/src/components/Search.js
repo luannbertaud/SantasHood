@@ -1,14 +1,14 @@
 import React from 'react';
-import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput, Box, Paper, Typography, ButtonBase } from '@mui/material';
+import { InputLabel, Grid, MenuItem, Select, TextField, Button, OutlinedInput, Box, Paper, Typography } from '@mui/material';
 import axios from 'axios';
-import { Link, Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import { Base64 } from 'js-base64';
 import { motion } from 'framer-motion';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
-const options = ['cado', 'dodo', 'balo', 'nul', 'rien']
+const options = ['0', '1', '2', '3', '8', '9', '10', '11', '12', '13']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
 const ITEM_HEIGHT = 48;
@@ -32,7 +32,8 @@ export default class Homepage extends React.Component {
             sexe: '',
             valid: false,
             redirect: undefined,
-            interests: []
+            interests: [],
+            data: [],
         }
         this.onAgeChange = this.onAgeChange.bind(this);
         this.onSexeChange = this.onSexeChange.bind(this);
@@ -86,6 +87,9 @@ export default class Homepage extends React.Component {
         axios.get(UserGetUrl + data)
             .then((response) => {
                 console.log(response.data)
+                this.setState({
+                    data: response.data.data
+                })
             }).catch((err) => {
                 console.log(err.response);
             });
@@ -98,14 +102,14 @@ export default class Homepage extends React.Component {
                 <Box sx={{ mx: 2, mt: 2, textAlign: 'start' }} onClick={() => { this.setState({ redirect: '/' }) }}>
                     <ArrowBackIosIcon />
                 </Box>
-                <Box sx={{ mb: 6, mt: 2 }}>
+                <Box sx={{ mb: 3, mt: 2 }}>
                     <Typography fontFamily={"Poppins"} fontSize={30} fontWeight={500}>
                         Search a gift 🔎
                     </Typography>
                 </Box>
                 <Box sx={{ m: 'auto' }}>
                     <Grid container justifyContent='center'>
-                        <Paper sx={{ mb: 4, mt: 2, borderRadius: 8, py: '2%', width: '50%', textAlign: 'center' }} elevation={3} component={motion.div} whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}>
+                        <Paper sx={{ mb: 4, borderRadius: 8, py: '2%', width: '50%', textAlign: 'center' }} elevation={3} component={motion.div} whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}>
                             <Box>
                                 <TextField
                                     required
@@ -160,7 +164,16 @@ export default class Homepage extends React.Component {
                         </Paper>
                     </Grid>
                 </Box>
-                <Button sx={{ marginTop: '2%' }} disabled={!this.isValid()} variant="contained" onClick={() => this.onClickSearch}>Search 🔎</Button>
+                <Button disabled={!this.isValid()} variant="contained" onClick={() => this.onClickSearch()}>Search 🔎</Button>
+                <Grid container sx={{mb: '10%'}}>
+                    <Grid item xs="auto" sx={{justifyItems: 'center'}}>
+                        {this.state.data.map((data, i) => {
+                            return (
+                                <Gift data={data} key={i}/>
+                            );
+                        })}
+                    </Grid>
+                </Grid>
             </Box>
         )
     }

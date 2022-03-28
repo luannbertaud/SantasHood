@@ -25,7 +25,7 @@ import Giftcard from "./Giftcard";
 import Usercard from "./Usercard";
 
 
-const REACT_APP_SERV_URL = process.env.REACT_APP_SERV_URL;
+const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';
 
 const theme = createTheme({
     palette: {
