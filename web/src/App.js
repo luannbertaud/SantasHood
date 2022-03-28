@@ -7,7 +7,7 @@ import Submit from './components/Submit';
 
 function App() {
   return (
-    <AnimatePresence exitBeforeEnter initial={false}>
+    <AnimatePresence>
       <Routes>
         <Route path='/' element={<Homepage/>} />
         <Route path='/search' element={<Search/>} />

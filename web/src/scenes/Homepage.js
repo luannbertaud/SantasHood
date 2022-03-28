@@ -3,6 +3,8 @@ import { Box, Grid, Paper, Typography, ButtonBase } from '@mui/material';
 import { Link, Navigate } from "react-router-dom"
 import Gift from '../components/Gifts';
 import { motion } from 'framer-motion';
+import Snowfall from 'react-snowfall'
+import { FallingEmojis } from 'falling-emojis';
 
 const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 
@@ -35,6 +37,7 @@ export default class Homepage extends React.Component {
     render() {
         return (
             <>
+                <FallingEmojis emoji={'🌲'} />
                 <Box sx={{p: 2, my: 6}} component={motion.div} whileHover={{ scale: 1.2, rotate: 9 }} whileTap={{rotate: 180}}>
                     <Typography fontFamily={"Rubik"} fontSize={34} textAlign={"center"}>
                         Santa's Hood 🎅

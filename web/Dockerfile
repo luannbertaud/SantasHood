@@ -5,7 +5,7 @@ COPY . .
 ARG SERV_ENABLE_SSL
 ENV SERV_ENABLE_SSL $SERV_ENABLE_SSL
 
-RUN npm install
+RUN npm clean-install
 RUN npm install -g serve
 RUN npm run build
 
