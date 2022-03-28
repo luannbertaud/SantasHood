@@ -1,7 +1,4 @@
 import React from 'react';
-import {Box, Grid } from '@mui/material'
-
-const REACT_APP_SERV_URL = 'http://172.23.0.4:5000/'
 
 export default function Gift({ gift }) {
 

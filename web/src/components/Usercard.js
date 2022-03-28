@@ -28,7 +28,7 @@ const Item = styled(Paper)(({ theme }) => ({
     padding: "2%",
     textAlign: 'center',
     backgroundColor: "rgba(230, 194, 241, 0.358)",
-  }));
+}));
 
 export default class Usercard extends React.Component {
     constructor(props) {
@@ -47,12 +47,12 @@ export default class Usercard extends React.Component {
         }
     }
 
-    render() { 
+    render() {
         return (
             <Box
                 sx={{
-                    height:"100%",
-                    width:"134%",
+                    height: "100%",
+                    width: "134%",
                 }}
             >
                 <Box className='giftcard-outer'>
@@ -75,11 +75,11 @@ export default class Usercard extends React.Component {
                                         About You
                                     </Typography>
                                     <div style={{
-                                        backgroundColor: "#cccc00",
+                                        backgroundColor: "#f8b331",
                                         borderRadius: "50px",
                                         height: "40px",
                                         width: "35px",
-                                        float:"right",
+                                        float: "right",
                                         marginLeft: "5px",
                                     }}>
                                         👀
@@ -87,7 +87,7 @@ export default class Usercard extends React.Component {
                                 </div>
                             }
                         />
-                        <Divider sx={{borderWidth: "1px", width: "100%"}} />
+                        <Divider sx={{ borderWidth: "1px", width: "100%" }} />
                         <CardContent
                             sx={{
                                 padding: 0,
@@ -103,32 +103,27 @@ export default class Usercard extends React.Component {
                                 <Grid item xs={7} >
                                     <Grid container spacing={2} >
                                         <Grid item xs={12} >
-                                            <FormControl sx={{ width:"90%" }}>
-                                                <InputLabel id="demo-simple-select-label">Age *</InputLabel>
-                                                <Select
+                                            <FormControl sx={{ width: "90%" }}>
+                                                <TextField
+                                                    required
+                                                    id="outlined-number"
+                                                    type="number"
+                                                    label="Age"
                                                     value={this.state.age}
-                                                    label="Age *"
-                                                    onChange={(e) => {this.setState({...this.state, age: e.target.value})}}
-                                                    sx={{ fontSize: '20px' }}
-                                                >
-                                                        {Array.from(Array(120).keys()).map((name) => (
-                                                            <MenuItem
-                                                                key={name}
-                                                                value={name}
-                                                            >
-                                                                {name}
-                                                            </MenuItem>
-                                                        ))}
-                                                </Select>
+                                                    onChange={(e) => { this.setState({ ...this.state, age: e.target.value }) }}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
                                             </FormControl>
                                         </Grid>
                                         <Grid item xs={12} >
-                                            <FormControl sx={{ width:"90%" }}>
+                                            <FormControl sx={{ width: "90%" }}>
                                                 <InputLabel id="demo-simple-select-label">Sexe *</InputLabel>
                                                 <Select
                                                     value={this.state.sexe}
                                                     label="Sexe *"
-                                                    onChange={(e) => {this.setState({...this.state, sexe: e.target.value})}}
+                                                    onChange={(e) => { this.setState({ ...this.state, sexe: e.target.value }) }}
                                                     sx={{ fontSize: '20px' }}
                                                 >
                                                     <MenuItem key={"F"} value={"F"} >F</MenuItem>
@@ -147,7 +142,7 @@ export default class Usercard extends React.Component {
                                         fontSizeSecondary="15px"
                                         backgroundColor="#F8B229"
                                         content={this.state.categories}
-                                        setContent={(c) => {this.setState({categories: c})}}
+                                        setContent={(c) => { this.setState({ categories: c }) }}
                                     />
                                 </Grid>
                             </Grid>
@@ -175,7 +170,7 @@ export default class Usercard extends React.Component {
                         fontSizeSecondary="15px"
                         backgroundColor="#5b9775"
                         content={this.state.categories}
-                        setContent={(c) => {this.setState({categories: c})}}
+                        setContent={(c) => { this.setState({ categories: c }) }}
                     />
                 </Box>
             </Box>
