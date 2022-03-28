@@ -12,6 +12,7 @@ import { FallingEmojis } from 'falling-emojis';
 
 import CloseIcon from '@mui/icons-material/Close';
 import AddCircle from '@mui/icons-material/AddCircle';
+import SendIcon from '@mui/icons-material/Send';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Link, Navigate } from "react-router-dom"
 import MuiAlert from '@mui/material/Alert';
@@ -87,128 +88,56 @@ export default class Submit extends React.Component {
             giftsdata: [],
         }
 
-        this.onNameChange = this.onNameChange.bind(this);
-        this.onDescChange = this.onDescChange.bind(this);
-        this.onBudgetChange = this.onBudgetChange.bind(this);
-        this.onScopeChange = this.onScopeChange.bind(this);
-        this.onClutteringChange = this.onClutteringChange.bind(this);
-        this.onShortlivedChange = this.onShortlivedChange.bind(this);
-        this.onCategoriesChange = this.onCategoriesChange.bind(this);
-
-        this.onAgeChange = this.onAgeChange.bind(this);
-        this.onSexeChange = this.onSexeChange.bind(this);
-        this.onInterestsChange = this.onInterestsChange.bind(this);
-
         this.onClickSubmit = this.onClickSubmit.bind(this);
 
-        this.addGiftData = this.addGiftData.bind(this);
         this._currentGift = React.createRef();
-    }
-
-    addGiftData(newgift) {
-        this.setState(
-            {
-                ...this.state,
-                giftsdata: [...this.state.giftsdata, newgift]
-            }
-        );
-    }
-
-    onNameChange(event) {
-        this.setState({
-            name: event.target.value
-        })
-    }
-    onDescChange(event) {
-        this.setState({
-            description: event.target.value
-        })
-    }
-    onBudgetChange(event) {
-        this.setState({
-            budget: event.target.value
-        })
-    }
-    onScopeChange(event) {
-        this.setState({
-            scope: event.target.value
-        })
-    }
-    onClutteringChange(event) {
-        this.setState({
-            cluttering: event.target.value
-        })
-    }
-    onShortlivedChange(status) {
-        this.setState({
-            shortlived: status
-        })
-    }
-    onCategoriesChange(event) {
-        this.setState({
-            categories: event.target.value
-        })
-    }
-    onAgeChange(event) {
-        this.setState({
-            age: event.target.value
-        })
-    }
-    onSexeChange(event) {
-        this.setState({
-            sexe: event.target.value
-        })
-    }
-    onInterestsChange(event) {
-        this.setState({
-            interests: event.target.value
-        })
-    }
-
-    isValid() {
-        return this.state.name && this.state.description && this.state.budget && this.state.scope && this.state.cluttering && this.state.categories.length !== 0 && this.state.age && this.state.sexe && this.state.interests.length !== 0;
+        this._user = React.createRef();
     }
 
     onClickSubmit() {
-        const GiftPostUrl = REACT_APP_SERV_URL + "gifts/newcards"
-        const UserPostUrl = REACT_APP_SERV_URL + "users/newcards"
+        let userdata = this._user.current.generateCardData();
+        console.log(this.state.giftsdata);
+        console.log(userdata)
+    
+        // const GiftPostUrl = REACT_APP_SERV_URL + "gifts/newcards"
+        // const UserPostUrl = REACT_APP_SERV_URL + "users/newcards"
 
-        const giftToSend = {
-            cards: [{
-                uuid: uuidv4(),
-                name: this.state.name,
-                description: this.state.description,
-                budget: parseInt(this.state.budget, 10),
-                scope: this.state.scope,
-                cluttering: this.state.cluttering,
-                shortlived: this.state.shortlived,
-                categories: this.state.categories,
-            }]
-        }
+        // const giftToSend = {
+        //     cards: [{
+        //         uuid: uuidv4(),
+        //         name: this.state.name,
+        //         description: this.state.description,
+        //         budget: parseInt(this.state.budget, 10),
+        //         scope: this.state.scope,
+        //         cluttering: this.state.cluttering,
+        //         shortlived: this.state.shortlived,
+        //         categories: this.state.categories,
+        //     }]
+        // }
 
-        const userToSend = {
-            cards: [{
-                uuid: uuidv4(),
-                age: parseInt(this.state.age, 10),
-                sexe: this.state.sexe,
-                interests: this.state.interests,
-                likedgifts: [giftToSend.cards[0].uuid],
-            }]
-        }
-        axios.post(GiftPostUrl, giftToSend)
-            .then((response) => {
-                console.log(response.data)
-            }).catch((err) => {
-                console.log(err.response);
-            });
+        // const userToSend = {
+        //     cards: [{
+        //         uuid: uuidv4(),
+        //         age: parseInt(this.state.age, 10),
+        //         sexe: this.state.sexe,
+        //         interests: this.state.interests,
+        //         likedgifts: [giftToSend.cards[0].uuid],
+        //     }]
+        // }
+        // axios.post(GiftPostUrl, giftToSend)
+        //     .then((response) => {
+        //         console.log(response.data)
+        //     }).catch((err) => {
+        //         console.log(err.response);
+        //     });
 
-        axios.post(UserPostUrl, userToSend)
-            .then((response) => {
-                console.log(response.data)
-                alert('Successfully submitted')
-            }).catch((err) => {
-                console.log(err.response);
-            });
+        // axios.post(UserPostUrl, userToSend)
+        //     .then((response) => {
+        //         console.log(response.data)
+        //         alert('Successfully submitted')
+        //     }).catch((err) => {
+        //         console.log(err.response);
+        //     });
     }
 
     render() {
@@ -242,7 +171,7 @@ export default class Submit extends React.Component {
                                 textAlign: "center",
                             }}
                         >
-                            <Usercard/>
+                            <Usercard ref={this._user}/>
                         </Box>
                         <Box
                             component={motion.div}
@@ -276,6 +205,27 @@ export default class Submit extends React.Component {
                                 content={this.state.giftsdata}
                                 setContent={(c) => {this.setState({giftsdata: c})}}
                             />
+                            <Box
+                                sx={{
+                                    textAlign: "end",
+                                    "& .MuiSvgIcon-root": {
+                                        fontSize: 30,
+                                    },
+                                }}
+                            >
+                                <Button
+                                    sx={{
+                                        marginTop: "80%",
+                                        fontSize: 20, 
+                                        fontFamily: ["Rubik"]
+                                    }}
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    onClick={this.onClickSubmit}
+                                >
+                                    OK
+                                </Button>
+                            </Box>
                         </Box>
                     </Box>
                     <Dialog

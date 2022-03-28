@@ -30,24 +30,36 @@ const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "rgba(230, 194, 241, 0.358)",
   }));
 
+function not(a, b) {
+return a.filter((value) => b.indexOf(value) === -1);
+}
+
 export default class Usercard extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            giftUuid: uuidv4(),
-            name: undefined,
-            description: undefined,
-            budget: undefined,
-            scope: undefined,
-            cluttering: 3,
-            shortlived: false,
-            categories: [0, 1, 2, 3, 8, 9, 10, 11, 12, 13],
+            uuid: uuidv4(),
             age: "",
             sexe: "",
+            rootcategories: [0, 1, 2, 3, 8, 9, 10, 11, 12, 13],
+            avcategories: [],
+            categories: [],
         }
+        this.state.avcategories = this.state.rootcategories;
+        this.generateCardData = this.generateCardData.bind(this);
         this._child = React.createRef();
         this._props = props;
     }
+
+    generateCardData() {
+        return({
+            uuid: this.state.uuid,
+            age: this.state.age,
+            sexe: this.state.sexe,
+            interests: this.state.categories,
+        });
+    }
+
 
     render() { 
         return (
@@ -150,8 +162,8 @@ export default class Usercard extends React.Component {
                                         fontSize="20px"
                                         fontSizeSecondary="15px"
                                         backgroundColor="#F8B229"
-                                        content={this.state.categories}
-                                        setContent={(c) => {this.setState({categories: c})}}
+                                        content={this.state.avcategories}
+                                        setContent={(c) => {this.setState({avcategories: c, categories: not(this.state.rootcategories, c)})}}
                                     />
                                 </Grid>
                             </Grid>
@@ -178,8 +190,8 @@ export default class Usercard extends React.Component {
                         fontSize="20px"
                         fontSizeSecondary="15px"
                         backgroundColor="#5b9775"
-                        content={this.state.categories}
-                        setContent={(c) => {this.setState({categories: c})}}
+                        content={this.state.avcategories}
+                        setContent={(c) => {this.setState({avcategories: c, categories: not(this.state.rootcategories, c)})}}
                     />
                 </Box>
             </Box>
