@@ -13,7 +13,6 @@ import { FallingEmojis } from 'falling-emojis';
 import CloseIcon from '@mui/icons-material/Close';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-// import "./giftcard.css";
 import { Link, Navigate } from "react-router-dom"
 import MuiAlert from '@mui/material/Alert';
 
@@ -103,6 +102,7 @@ export default class Submit extends React.Component {
         this.onClickSubmit = this.onClickSubmit.bind(this);
 
         this.addGiftData = this.addGiftData.bind(this);
+        this._currentGift = React.createRef();
     }
 
     addGiftData(newgift) {
@@ -272,7 +272,7 @@ export default class Submit extends React.Component {
                                 fontSize="28px"
                                 fontSizeSecondary="20px"
                                 backgroundColor="#c95153"
-                                viewFunc={(val) => val.title}
+                                viewFunc={(val) => val.name}
                                 content={this.state.giftsdata}
                                 setContent={(c) => {this.setState({giftsdata: c})}}
                             />
@@ -317,11 +317,11 @@ export default class Submit extends React.Component {
                                 marginRight: "calc(34*70vh/100)"
                             }}
                         > 
-                            <Giftcard/>
+                            <Giftcard ref={this._currentGift} />
                         </Box>
                     </DialogContent>
                     <DialogActions sx={{ float: "right", mb: "1%", mr: "1%" }}>
-                        <Button onClick={() => { this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, {"title": "yessay"}], snackalert: true, snackalertmessage: "Gift registered"}) }}>Validate</Button>
+                        <Button onClick={() => { console.log(this._currentGift.current.generateCardData()); this.setState({...this.state, giftdialog: false, giftsdata: [...this.state.giftsdata, this._currentGift.current.generateCardData()], snackalert: true, snackalertmessage: "Gift registered"}) }}>Validate</Button>
                     </DialogActions>
                     </Dialog>
                     <Snackbar

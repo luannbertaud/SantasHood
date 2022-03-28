@@ -45,12 +45,16 @@ export default class Usercard extends React.Component {
             age: "",
             sexe: "",
         }
+        this._child = React.createRef();
+        this._props = props;
     }
 
     render() { 
         return (
             <Box
+                ref={this._child}
                 sx={{
+                    ...this._props.sx,
                     height:"100%",
                     width:"134%",
                 }}
