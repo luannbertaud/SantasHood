@@ -165,14 +165,14 @@ export default class Homepage extends React.Component {
                     </Grid>
                 </Box>
                 <Button disabled={!this.isValid()} variant="contained" onClick={() => this.onClickSearch()}>Search 🔎</Button>
-                <Grid container sx={{mb: '10%'}}>
-                    <Grid item xs="auto" sx={{justifyItems: 'center'}}>
-                        {this.state.data.map((data, i) => {
-                            return (
-                                <Gift data={data} key={i}/>
-                            );
-                        })}
-                    </Grid>
+                <Grid container sx={{ mt: '3%' }}>
+                    {this.state.data.map((data, i) => {
+                        return (
+                            <Grid item xs={2} sx={{ justifyItems: 'center' }}>
+                                <Gift data={data} key={i} />
+                            </Grid>
+                        );
+                    })}
                 </Grid>
             </Box>
         )
