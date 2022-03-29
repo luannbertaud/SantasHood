@@ -20,9 +20,9 @@ import axios from "axios";
 import { Navigate } from "react-router-dom"
 import { motion } from 'framer-motion';
 import { FallingEmojis } from 'falling-emojis';
-import { GiftsList } from "./Categories";
-import Giftcard from "./Giftcard";
-import Usercard from "./Usercard";
+import { GiftsList } from "../components/Categories";
+import Giftcard from "../components/Giftcard";
+import Usercard from "../components/Usercard";
 
 
 const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/';

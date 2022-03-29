@@ -2,8 +2,8 @@ import './App.css';
 import { Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Homepage from './scenes/Homepage';
-import Search from './components/Search';
-import Submit from './components/Submit';
+import Search from './scenes/Search';
+import Submit from './scenes/Submit';
 
 function App() {
   return (
