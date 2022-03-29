@@ -7,7 +7,7 @@ import { Base64 } from 'js-base64';
 import { motion } from 'framer-motion';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-const REACT_APP_SERV_URL = 'http://172.23.0.3:5000/'
+const REACT_APP_SERV_URL = process.env.REACT_APP_SERV_URL
 const options = ['0', '1', '2', '3', '8', '9', '10', '11', '12', '13']
 const names = [{ name: 'Homme', char: 'M' }, { name: 'Femme', char: 'F' }, { name: 'Autres', char: 'A' }]
 
