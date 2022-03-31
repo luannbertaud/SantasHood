@@ -2,7 +2,7 @@
 
 from peewee import Model as __Model
 from peewee import TextField, IntegerField, BooleanField, DateTimeField
-from playhouse.postgres_ext import JSONField, ArrayField
+from playhouse.postgres_ext import ArrayField, JSONField
 from models.db_globals import db
 
 class __BaseModel(__Model):
